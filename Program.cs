@@ -1,191 +1,130 @@
-﻿namespace BakeshopManagement
+﻿using System;
+using BakeshopManagement.Business;
+using BakeshopManagement.UI;
+
+namespace BakeshopManagement
 {
     internal class Program
     {
-        static List<string> menu = new List<string>(); // Stores products
-
         static void Main(string[] args)
-
         {
-            //  manage a bakeshop's menu by adding, deleting, searching,
-            //  and viewing products
+            LogIn_UI loginUI = new LogIn_UI();
+            loginUI.DisplayLogin();
 
-            string username = "admin";
-            string pin = "1234";
-            string usernameInput;
-            string pinInput;
+            // Admin menu after successful login
+            AdminMenu();
+        }
 
-            Console.WriteLine("== LOGIN ==");
+        static void AdminMenu()
+        {
+            int userAction;
 
-            // --------------- user login w/ looping --------------
             do
             {
-                Console.Write("Enter Username: ");
-                usernameInput = Console.ReadLine();
+                Console.WriteLine("\nChoose an Action");
+                Console.WriteLine("[1] Add Product");
+                Console.WriteLine("[2] Delete Product");
+                Console.WriteLine("[3] Search Product");
+                Console.WriteLine("[4] View Menu");
+                Console.WriteLine("[5] Exit");
 
-                Console.Write("Enter Pin: ");
-                pinInput = Console.ReadLine();
+                Console.Write("Enter Action: ");
 
-                if (usernameInput != username || pinInput != pin)
+                if (int.TryParse(Console.ReadLine(), out userAction))
                 {
-                    Console.WriteLine("Invalid username or pin. Please try again :p");
-
+                    ChooseAction(userAction);
                 }
                 else
                 {
-                    Console.WriteLine("\n == WELCOME TO XANNE'S BAKESHOP == ");
-                    InputAction();
+                    Console.WriteLine("Invalid input. Please enter a number.");
                 }
-
-            } while (usernameInput != username || pinInput != pin);
-
-        }
-
-        // --------------- displays a list of actions --------------
-        static void InputAction() {
-            int userAction;
-
-           
-            do
-            {
-                string[] actions = new string[] { "[1] Add Product", "[2] Delete Product",
-                        "[3] Search Product", "[4] View Menu",  "[5] Exit"  };
-
-                Console.WriteLine("\n Choose an Action");
-
-                foreach (var action in actions)
-                {
-                    Console.WriteLine(action);
-                }
-                Console.Write("Enter Action: ");
-                userAction = Convert.ToInt16(Console.ReadLine());
-
-                ChooseAction(userAction);
 
             } while (userAction != 5);
         }
 
-        //  ------------ handles the logic for each selected action -------------
         static void ChooseAction(int action)
         {
             switch (action)
             {
-                case 1: // Adding product in the menu 
+                case 1: // Add product
                     Console.Write("Enter a product: ");
                     string product = Console.ReadLine();
 
+                    Console.Write("Enter the price: P");
 
-                    if (!string.IsNullOrEmpty(product))
+                    if (decimal.TryParse(Console.ReadLine(), out decimal price) && price >= 0)
                     {
-                        menu.Add(product);
-                        Console.WriteLine($"{product} has been added to the menu.");
+                        if (!string.IsNullOrEmpty(product))
+                        {
+                            BakeshopProcess.AddProduct(product, price);
+                            Console.WriteLine($"{product} [ P{price} ] has been added to the menu.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Please enter a valid product name.");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("Please enter a valid product name.");
+                        Console.WriteLine("Invalid price. Please enter a valid number.");
                     }
-
-                    BackToActionOption(1);
                     break;
 
-                case 2: // deleting product in the menu
+                case 2: // Delete product
                     Console.Write("Enter product to delete: ");
                     string productDelete = Console.ReadLine();
 
-                    if (!string.IsNullOrEmpty(productDelete))
+                    if (BakeshopProcess.DeleteProduct(productDelete))
                     {
-                        if (menu.Contains(productDelete))
-                        {
-                            menu.Remove(productDelete);
-                            Console.WriteLine($"{productDelete} has been removed from the menu.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{productDelete} was not found in the menu.");
-                        }
+                        Console.WriteLine($"{productDelete} has been removed from the menu.");
                     }
                     else
                     {
-                        Console.WriteLine("Please enter a product to delete.");
+                        Console.WriteLine($"{productDelete} was not found in the menu.");
                     }
-
-                    BackToActionOption(2);
                     break;
 
-
-                case 3: // searching product
+                case 3: // Search product
                     Console.Write("Enter product name to search: ");
                     string searchItem = Console.ReadLine();
 
-                    if (!string.IsNullOrWhiteSpace(searchItem))
+                    var result = BakeshopProcess.SearchProduct(searchItem);
+
+                    if (result.HasValue)
                     {
-                        if (menu.Contains(searchItem))
-                        {
-                            Console.WriteLine($"{searchItem} is available in the menu.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"{searchItem} is not in the menu.");
-                        }
+                        Console.WriteLine($"{searchItem} is available in the menu for P{result}.");
                     }
                     else
                     {
-                        Console.WriteLine("Please enter a valid product name.");
+                        Console.WriteLine($"{searchItem} is not in the menu.");
                     }
-
-                    BackToActionOption(3);
                     break;
 
-                case 4: // showing the list of items added in the menu
+                case 4: // Display the menu
                     Console.WriteLine("\n===== MENU ITEMS =====");
+                    var menu = BakeshopProcess.GetMenu();
+
                     if (menu.Count == 0)
                     {
                         Console.WriteLine("No products in the menu.");
                     }
                     else
                     {
-                       
                         for (int i = 0; i < menu.Count; i++)
                         {
-                            Console.WriteLine((i + 1) + ". " + menu[i]);
-
-                           
-
+                            // Display in your preferred format
+                            Console.WriteLine($"{i + 1}. {menu[i].Name} [ P{menu[i].Price} ]");
                         }
-                         
                     }
                     break;
 
-                case 5: // exit
+                case 5: // Exit
                     Console.WriteLine("Exiting program. Thank you!");
-                    BackToActionOption(5);
                     break;
 
-                default: // for invalid choice will go back to selecting actions
+                default:
                     Console.WriteLine("Invalid choice. Please select a number between 1-5.");
-                    InputAction();
                     break;
-            }
-        }
-
-        // ----- This method prompts the user if they want to go back to the action options -------
-        static void BackToActionOption(int lastAction)
-        {
-            Console.WriteLine("\nDo you want to go back to action options? [1] Yes [2] No ");
-            string input = Console.ReadLine();
-
-            if (input == "1")
-            {
-                InputAction();
-            }
-            else if (input == "2")
-            {
-                ChooseAction(lastAction);
-            }
-            else
-            {
-                Console.WriteLine("Invalid input. Returning to action options.");
-                InputAction();
             }
         }
     }
