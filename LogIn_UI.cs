@@ -28,7 +28,7 @@ namespace BakeshopManagement.UI
                 else if (BakeshopProcess.ValidateCustomer(usernameInput, pinInput))
                 {
                     Console.WriteLine("\n== WELCOME TO XANNE'S BAKESHOP (CUSTOMER) == ");
-                    return;  // Customer-specific actions can be added later
+                    return;  // to be added later
                 }
                 else
                 {
