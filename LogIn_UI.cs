@@ -1,14 +1,14 @@
 ﻿using System;
 using BakeshopManagement.Business;
+using BakeshopManagement.UI;
 
-namespace BakeshopManagement.UI
+namespace BakeshopManagement
 {
     public class LogIn_UI
     {
         public void DisplayLogin()
         {
-            string usernameInput;
-            string pinInput;
+            string usernameInput, pinInput;
 
             Console.WriteLine("== LOGIN ==");
 
@@ -20,15 +20,19 @@ namespace BakeshopManagement.UI
                 Console.Write("Enter Pin: ");
                 pinInput = Console.ReadLine();
 
-                if (BakeshopProcess.ValidateAdmin(usernameInput, pinInput))
+                if (usernameInput == BakeshopProcess.adminUsername && pinInput == BakeshopProcess.adminPin)
                 {
                     Console.WriteLine("\n== WELCOME TO XANNE'S BAKESHOP (ADMIN) == ");
-                    return;  // Proceed to admin menu
+                    Program.Admin();  
+                    break;
                 }
-                else if (BakeshopProcess.ValidateCustomer(usernameInput, pinInput))
+                else if (usernameInput == BakeshopProcess.customerUsername && pinInput == BakeshopProcess.customerPin)
                 {
                     Console.WriteLine("\n== WELCOME TO XANNE'S BAKESHOP (CUSTOMER) == ");
-                    return;  // to be added later
+
+                    Order_UI orderUI = new Order_UI();
+                    orderUI.Customer();
+                    break;
                 }
                 else
                 {

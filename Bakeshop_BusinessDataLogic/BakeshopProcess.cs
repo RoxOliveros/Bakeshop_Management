@@ -5,10 +5,10 @@ namespace BakeshopManagement.Business
     public static class BakeshopProcess
     {
         // Admin and Customer Credentials
-        private static string AdminUsername = "admin";
-        private static string AdminPin = "123";
-        private static string CustomerUsername = "Xanne";
-        private static string CustomerPin = "uno";
+        public static string adminUsername = "admin";
+        public static string adminPin = "123";
+        public static string customerUsername = "Xanne";
+        public static string customerPin = "uno";
 
 
         // Menu data
@@ -18,13 +18,13 @@ namespace BakeshopManagement.Business
         // Admin login validation
         public static bool ValidateAdmin(string username, string pin)
         {
-            return username == AdminUsername && pin == AdminPin;
+            return username == adminUsername && pin == adminPin;
         }
 
         // Customer login validation
         public static bool ValidateCustomer(string username, string pin)
         {
-            return username == CustomerUsername && pin == CustomerPin;
+            return username == customerUsername && pin == customerPin;
         }
 
         // Add product
@@ -51,8 +51,17 @@ namespace BakeshopManagement.Business
         public static decimal? SearchProduct(string product)
         {
             int index = Menu.IndexOf(product);
-            return index != -1 ? Prices[index] : (decimal?)null;
+
+            if (index != -1)  
+            {
+                return Prices[index];  
+            }
+            else  
+            {
+                return null; 
+            }
         }
+
 
         // Get the menu
         public static List<(string Name, decimal Price)> GetMenu()
@@ -66,5 +75,19 @@ namespace BakeshopManagement.Business
 
             return menuList;
         }
+
+        public static (bool isAvailable, decimal totalPrice) ProcessOrder(string product, int quantity)
+        {
+            decimal? price = SearchProduct(product);
+
+            if (price != null)
+            {
+                decimal totalPrice = (decimal)price * quantity;  // Calculate total price
+                return (true, totalPrice);
+            }
+
+            return (false, 0);
+        }
+
     }
 }
