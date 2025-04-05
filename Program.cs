@@ -21,8 +21,12 @@ namespace BakeshopManagement
 
             do
             {
-                string[] actions = new string[] { "[1] Add Product", "[2] Delete Product",
-                        "[3] Search Product", "[4] View Menu",  "[5] Logout"  };
+                string[] actions = new string[] { 
+                    "[1] Add Product", 
+                    "[2] Delete Product",
+                    "[3] Search Product", 
+                    "[4] View Menu",  
+                    "[5] Logout"  };
 
                 Console.WriteLine("\n Choose an Action");
 
@@ -93,21 +97,7 @@ namespace BakeshopManagement
                             break;
 
                         case 4: // Display the menu
-                            Console.WriteLine("\n===== MENU ITEMS =====");
-                            var menu = BakeshopProcess.GetMenu();
-
-                            if (menu.Count == 0)
-                            {
-                                Console.WriteLine("No products in the menu.");
-                            }
-                            else
-                            {
-                                for (int i = 0; i < menu.Count; i++)
-                                {
-                                    // Display in your preferred format
-                                    Console.WriteLine($"{i + 1}. {menu[i].Name} [ P{menu[i].Price} ]");
-                                }
-                            }
+                            Menu();
                             break;
 
                         case 5: // Exit
@@ -125,6 +115,22 @@ namespace BakeshopManagement
                 } while (adminAction != 5) ;
             }
 
+        public static void Menu() {
+            Console.WriteLine("\n===== MENU ITEMS =====");
+            var menu = BakeshopProcess.GetMenu();
 
+            if (menu.Count == 0)
+            {
+                Console.WriteLine("No products in the menu.");
+            }
+            else
+            {
+                for (int i = 0; i < menu.Count; i++)
+                {
+                    
+                    Console.WriteLine($"{i + 1}. {menu[i].Name} [ P{menu[i].Price} ]");
+                }
+            }
+        }
     }
     }

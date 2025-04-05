@@ -32,21 +32,7 @@ namespace BakeshopManagement.UI
                     switch (customerAction)
                     {
                         case 1: // View Menu
-                            Console.WriteLine("\n===== MENU ITEMS =====");
-
-                            var menu = BakeshopProcess.GetMenu();  // Retrieve menu from business logic
-
-                            if (menu.Count == 0)
-                            {
-                                Console.WriteLine("No products in the menu.");
-                            }
-                            else
-                            {
-                                for (int i = 0; i < menu.Count; i++)
-                                {
-                                    Console.WriteLine($"{i + 1}. {menu[i].Name} [ P{menu[i].Price} ]");
-                                }
-                            }
+                            Program.Menu();
                             break;
 
                         case 2: // Place Order
@@ -64,7 +50,9 @@ namespace BakeshopManagement.UI
 
                                 if (result.isAvailable)
                                 {
-                                    Console.WriteLine($"You ordered {quantity} x {product} for a total of P{result.totalPrice}.");
+                                    Console.WriteLine("======= Receipt =======\n");
+                                    Console.WriteLine($" {quantity}x{product} \t | \t P{result.totalPrice}");
+                                    Console.WriteLine("\nThank you for Ordering!");
                                 }
                                 else
                                 {

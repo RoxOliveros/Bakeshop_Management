@@ -8,24 +8,14 @@ namespace BakeshopManagement.Business
         public static string adminUsername = "admin";
         public static string adminPin = "123";
         public static string customerUsername = "Xanne";
-        public static string customerPin = "uno";
+        public static string customerPin = "heehee";
 
 
         // Menu data
         private static List<string> Menu = new List<string>();
         private static List<decimal> Prices = new List<decimal>();
 
-        // Admin login validation
-        public static bool ValidateAdmin(string username, string pin)
-        {
-            return username == adminUsername && pin == adminPin;
-        }
 
-        // Customer login validation
-        public static bool ValidateCustomer(string username, string pin)
-        {
-            return username == customerUsername && pin == customerPin;
-        }
 
         // Add product
         public static void AddProduct(string product, decimal price)
