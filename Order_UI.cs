@@ -1,11 +1,13 @@
 ﻿using System;
+using Bakeshop_Common;
 using BakeshopManagement.Business;
+
 
 namespace BakeshopManagement.UI
 {
     public class Order_UI
     {
-        public void Customer()
+        public void Customer (CustomerAccount customer)
         {
             int customerAction;
 
@@ -59,11 +61,12 @@ namespace BakeshopManagement.UI
 
                             // Process all orders
                             var receipt = BakeshopProcess.ProcessMultipleOrders(orders);
-                            BakeshopProcess.SaveOrder(receipt);
-
 
                             if (receipt.Count > 0)
                             {
+                                var order = new Order(receipt, customer.Name);  
+                                BakeshopProcess.SaveOrder(order);
+
                                 Console.WriteLine("\n\t XANNE'S BAKESHOP");
                                 Console.WriteLine("Address: Somewhere in Grandline");
                                 Console.WriteLine("Tel: 123-456-789");

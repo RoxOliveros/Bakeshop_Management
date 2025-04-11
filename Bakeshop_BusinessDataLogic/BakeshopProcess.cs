@@ -10,9 +10,16 @@ namespace BakeshopManagement.Business
        
         public static string adminUsername = "admin";
         public static string adminPin = "123";
-        public static string customerUsername = "Xanne";
-        public static string customerPin = "heehee";
+        public static bool ValidateCustomer(string username, string password)
+        {
+            return BakeshopRepository.ValidateCustomer(username, password);
+        }
 
+        public static CustomerAccount GetCustomer(string username)
+        {
+            return BakeshopRepository.GetCustomer(username);
+        }
+    
         public static void AddProduct(string product, decimal price)
         {
             BakeshopRepository.AddProduct(product, price);
@@ -59,11 +66,11 @@ namespace BakeshopManagement.Business
             return result;
         }
 
-        public static void SaveOrder(List<OrderItem> items)
+        public static void SaveOrder(Order order)
         {
-            var order = new Order(items);
-            BakeshopRepository.SaveOrder(order);
+            BakeshopRepository.SaveOrder(order); 
         }
+
 
         public static List<Order> GetOrders()
         {

@@ -9,11 +9,69 @@ namespace BakeshopManagement.Data
     public static class BakeshopRepository
     {
         
-        private static List<string> Menu = new List<string>();
-        private static List<decimal> Prices = new List<decimal>();
+        private static List<string> Menu = new List<string>(); // store product name
+        private static List<decimal> Prices = new List<decimal>(); // store price
+        private static List<Order> Orders = new List<Order>(); // store customers orders
+        private static List<CustomerAccount> Accounts = new List<CustomerAccount>(); // store customers account
 
-       
-        private static List<Order> Orders = new List<Order>();
+        static BakeshopRepository()
+        {
+            CreateDummyCustomerAccounts();
+        }
+
+        private static void CreateDummyCustomerAccounts()
+        {
+            Accounts.Add(new CustomerAccount
+            {
+                Name = "Roxanne Oliveros",
+                Username = "Xanne",
+                Password = "456",
+                Email = "roxanneoliveros12@gmail.com"
+            });
+
+            Accounts.Add(new CustomerAccount
+            {
+                Name = "Taz Skylar",
+                Username = "taz",
+                Password = "bibiko",
+                Email = "tazskylar@gmail.com"
+            });
+
+            Accounts.Add(new CustomerAccount
+            {
+                Name = "Dracule Mihawk",
+                Username = "Hawkeye",
+                Password = "yoru",
+                Email = "hawkeye12@gmail.com"
+            });
+
+            Accounts.Add(new CustomerAccount
+            {
+                Name = "Charlotte Katakuri",
+                Username = "Kuri",
+                Password = "donut",
+                Email = "katakuri48@gmail.com"
+            });
+
+            Accounts.Add(new CustomerAccount
+            {
+                Name = "Sanji",
+                Username = "SanjiPogi",
+                Password = "allblue",
+                Email = "sanji@gmail.com"
+            });
+        }
+
+        public static bool ValidateCustomer(string username, string password)
+        {
+            return Accounts.Any(a => a.Username == username && a.Password == password);
+        }
+
+        public static CustomerAccount GetCustomer(string username)
+        {
+            return Accounts.FirstOrDefault(a => a.Username == username);
+        }
+
 
         public static void AddProduct(string product, decimal price)
         {
