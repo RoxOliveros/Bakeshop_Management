@@ -9,12 +9,18 @@
 
   <ItemGroup>
     <Compile Remove="Bakeshop_BusinessDataLogic\**" />
+    <Compile Remove="Bakeshop_Common\**" />
+    <Compile Remove="Bakeshop_DataLogic\**" />
     <EmbeddedResource Remove="Bakeshop_BusinessDataLogic\**" />
+    <EmbeddedResource Remove="Bakeshop_Common\**" />
+    <EmbeddedResource Remove="Bakeshop_DataLogic\**" />
     <None Remove="Bakeshop_BusinessDataLogic\**" />
+    <None Remove="Bakeshop_Common\**" />
+    <None Remove="Bakeshop_DataLogic\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="Bakeshop_BusinessDataLogic\Bakeshop_BusinessDataLogic.csproj" />
+    <ProjectReference Include="Bakeshop_BusinessDataLogic\Bakeshop_BusinessLogic.csproj" />
   </ItemGroup>
 
 </Project>

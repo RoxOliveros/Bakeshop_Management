@@ -1,83 +1,73 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using BakeshopManagement.Data;
+using Bakeshop_Common;
 
 namespace BakeshopManagement.Business
 {
     public static class BakeshopProcess
     {
-        // Admin and Customer Credentials
+       
         public static string adminUsername = "admin";
         public static string adminPin = "123";
         public static string customerUsername = "Xanne";
         public static string customerPin = "heehee";
 
-
-        // Menu data
-        private static List<string> Menu = new List<string>();
-        private static List<decimal> Prices = new List<decimal>();
-
-
-
-        // Add product
         public static void AddProduct(string product, decimal price)
         {
-            Menu.Add(product);
-            Prices.Add(price);
+            BakeshopRepository.AddProduct(product, price);
         }
 
-        // Delete product
         public static bool DeleteProduct(string product)
         {
-            int index = Menu.IndexOf(product);
-            if (index != -1)
-            {
-                Menu.RemoveAt(index);
-                Prices.RemoveAt(index);
-                return true;
-            }
-            return false;
+            return BakeshopRepository.DeleteProduct(product);
         }
-
-        // Search product
-        public static decimal? SearchProduct(string product)
-        {
-            int index = Menu.IndexOf(product);
-
-            if (index != -1)  
-            {
-                return Prices[index];  
-            }
-            else  
-            {
-                return null; 
-            }
-        }
-
-
-        // Get the menu
+    
         public static List<(string Name, decimal Price)> GetMenu()
         {
-            var menuList = new List<(string, decimal)>();
-
-            for (int i = 0; i < Menu.Count; i++)
-            {
-                menuList.Add((Menu[i], Prices[i]));
-            }
-
-            return menuList;
+            return BakeshopRepository.GetMenu();
         }
 
-        public static (bool isAvailable, decimal totalPrice) ProcessOrder(string product, int quantity)
+        public static decimal? SearchProduct(string product)
         {
-            decimal? price = SearchProduct(product);
-
-            if (price != null)
-            {
-                decimal totalPrice = (decimal)price * quantity;  // Calculate total price
-                return (true, totalPrice);
-            }
-
-            return (false, 0);
+            return BakeshopRepository.SearchProduct(product);
         }
 
+        public static bool IsProductAvailable(string product, out decimal price)
+        {
+            return BakeshopRepository.TryGetPrice(product, out price);
+        }
+
+       
+        public static List<OrderItem> ProcessMultipleOrders(List<(string product, int quantity)> orders)
+        {
+            var result = new List<OrderItem>();
+
+            foreach (var order in orders)
+            {
+                if (IsProductAvailable(order.product, out decimal unitPrice))
+                {
+                    result.Add(new OrderItem
+                    {
+                        ProductName = order.product,
+                        Quantity = order.quantity,
+                        UnitPrice = unitPrice
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        public static void SaveOrder(List<OrderItem> items)
+        {
+            var order = new Order(items);
+            BakeshopRepository.SaveOrder(order);
+        }
+
+        public static List<Order> GetOrders()
+        {
+            return BakeshopRepository.GetOrders();
+        }
     }
 }

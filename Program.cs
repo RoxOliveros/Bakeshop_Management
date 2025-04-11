@@ -25,8 +25,9 @@ namespace BakeshopManagement
                     "[1] Add Product", 
                     "[2] Delete Product",
                     "[3] Search Product", 
-                    "[4] View Menu",  
-                    "[5] Logout"  };
+                    "[4] View Menu",
+                    "[5] View Orders",
+                    "[6] Logout"  };
 
                 Console.WriteLine("\n Choose an Action");
 
@@ -51,8 +52,15 @@ namespace BakeshopManagement
                             {
                                 if (!string.IsNullOrEmpty(product))
                                 {
-                                    BakeshopProcess.AddProduct(product, price);
-                                    Console.WriteLine($"{product} [ P{price} ] has been added to the menu.");
+                                    if (BakeshopProcess.SearchProduct(product).HasValue)
+                                    {
+                                        Console.WriteLine($"{product} already exists in the menu. Cannot add duplicates.");
+                                    }
+                                    else
+                                    {
+                                        BakeshopProcess.AddProduct(product, price);
+                                        Console.WriteLine($"{product} [ P{price} ] has been added to the menu.");
+                                    }
                                 }
                                 else
                                 {
@@ -64,6 +72,7 @@ namespace BakeshopManagement
                                 Console.WriteLine("Invalid price. Please enter a valid number.");
                             }
                             break;
+
 
                         case 2: // Delete product
                             Console.Write("Enter product to delete: ");
@@ -100,10 +109,15 @@ namespace BakeshopManagement
                             Menu();
                             break;
 
-                        case 5: // Exit
-                            Console.WriteLine("Logging out... Returning to login.\n");
-                            Main(null);  // Go back to the login screen by calling Main again
+                        case 5: // View Orders
+                            DisplayOrders();
                             break;
+
+                        case 6: // Logout
+                            Console.WriteLine("Logging out... Returning to login.\n");
+                            Main(null);
+                            break;
+
 
                     }
                 }
@@ -132,5 +146,31 @@ namespace BakeshopManagement
                 }
             }
         }
+
+        public static void DisplayOrders()
+        {
+
+            Console.WriteLine("\n===== CUSTOMER ORDERS =====");
+            var orders = BakeshopProcess.GetOrders();
+
+            if (orders.Count == 0)
+            {
+                Console.WriteLine("No orders placed yet.");
+            }
+            else
+            {
+                foreach (var order in orders)
+                {
+                    Console.WriteLine($"\nOrder ID: {order.OrderId}");
+                    foreach (var item in order.Items)
+                    {
+                        Console.WriteLine($" - {item.ProductName} x{item.Quantity} = P{item.Total}");
+                    }
+                    Console.WriteLine($"Total: P{order.TotalAmount}");
+                    Console.WriteLine("---------------------------");
+                }
+            }
+        }
+
     }
-    }
+}

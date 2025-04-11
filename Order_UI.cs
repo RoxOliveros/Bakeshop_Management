@@ -37,31 +37,57 @@ namespace BakeshopManagement.UI
 
                         case 2: // Place Order
 
-                            Console.WriteLine("\n===== PLACE ORDER =====");
+                            var orders = new List<(string, int)>();
 
-                            Console.Write("Enter product name: ");
-                            string product = Console.ReadLine();
-
-                            Console.Write("Enter quantity: ");
-                            if (int.TryParse(Console.ReadLine(), out int quantity) && quantity > 0)
+                            do
                             {
-                                // Call business logic method
-                                var result = BakeshopProcess.ProcessOrder(product, quantity);
+                                Console.Write("\nEnter product name: ");
+                                string product = Console.ReadLine();
 
-                                if (result.isAvailable)
+                                Console.Write("Enter quantity: ");
+                                if (int.TryParse(Console.ReadLine(), out int qty) && qty > 0)
                                 {
-                                    Console.WriteLine("======= Receipt =======\n");
-                                    Console.WriteLine($" {quantity}x{product} \t | \t P{result.totalPrice}");
-                                    Console.WriteLine("\nThank you for Ordering!");
+                                    orders.Add((product, qty));
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"{product} is not available in the menu.");
+                                    Console.WriteLine("Invalid quantity.");
                                 }
+
+                                Console.Write("\nDo you want to add another order? (yes/no): ");
+                            } while (Console.ReadLine().Trim().ToLower() == "yes");
+
+                            // Process all orders
+                            var receipt = BakeshopProcess.ProcessMultipleOrders(orders);
+                            BakeshopProcess.SaveOrder(receipt);
+
+
+                            if (receipt.Count > 0)
+                            {
+                                Console.WriteLine("\n\t XANNE'S BAKESHOP");
+                                Console.WriteLine("Address: Somewhere in Grandline");
+                                Console.WriteLine("Tel: 123-456-789");
+                                Console.WriteLine("------------------------------------------");
+
+                                Console.WriteLine($"Date: {DateTime.Now.ToString("MMMM dd, yyyy")} \t Time: {DateTime.Now.ToString("hh:mm tt")}");
+
+                                Console.WriteLine("------------------------------------------\n");
+
+
+
+                                decimal grandTotal = 0;
+                                foreach (var item in receipt)
+                                {
+                                    Console.WriteLine($"{item.Quantity}x {item.ProductName} \t @ P{item.UnitPrice}");
+                                    grandTotal += item.Total;
+                                }
+                                Console.WriteLine("\n------------------------------------------\n");
+                                Console.WriteLine($"TOTAL: P{grandTotal}");
+                                Console.WriteLine("\nThank you for ordering!");
                             }
                             else
                             {
-                                Console.WriteLine("Invalid quantity. Please enter a positive number.");
+                                Console.WriteLine("No valid products found in your order.");
                             }
                             break;
 
