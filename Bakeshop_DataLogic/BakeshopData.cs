@@ -1,139 +1,62 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using Bakeshop_Common;
+﻿using Bakeshop_Common;
 
-namespace BakeshopManagement.Data
+namespace Bakeshop_DataLogic
 {
-
-    public static class BakeshopRepository
+    public class BakeshopDataService
     {
-        
-        private static List<string> Menu = new List<string>(); // store product name
-        private static List<decimal> Prices = new List<decimal>(); // store price
-        private static List<Order> Orders = new List<Order>(); // store customers orders
-        private static List<CustomerAccount> Accounts = new List<CustomerAccount>(); // store customers account
+        IBakeshopDataService bakeshopDataService;
 
-        static BakeshopRepository()
+        public BakeshopDataService()
         {
-            CreateDummyCustomerAccounts();
+            // You can switch between data sources here:
+            // bakeshopDataService = new TextFileBakeshopDataSource();
+           // bakeshopDataService = new InMemoryBakeshopDataSource();
+             bakeshopDataService = new JsonFileBakeshopDataSource();
         }
 
-        private static void CreateDummyCustomerAccounts()
+        public List<(string Name, decimal Price)> GetMenu()
         {
-            Accounts.Add(new CustomerAccount
-            {
-                Name = "Roxanne Oliveros",
-                Username = "Xanne",
-                Password = "456",
-                Email = "roxanneoliveros12@gmail.com"
-            });
-
-            Accounts.Add(new CustomerAccount
-            {
-                Name = "Taz Skylar",
-                Username = "taz",
-                Password = "bibiko",
-                Email = "tazskylar@gmail.com"
-            });
-
-            Accounts.Add(new CustomerAccount
-            {
-                Name = "Dracule Mihawk",
-                Username = "Hawkeye",
-                Password = "yoru",
-                Email = "hawkeye12@gmail.com"
-            });
-
-            Accounts.Add(new CustomerAccount
-            {
-                Name = "Charlotte Katakuri",
-                Username = "Kuri",
-                Password = "donut",
-                Email = "katakuri48@gmail.com"
-            });
-
-            Accounts.Add(new CustomerAccount
-            {
-                Name = "Sanji",
-                Username = "SanjiPogi",
-                Password = "allblue",
-                Email = "sanji@gmail.com"
-            });
+            return bakeshopDataService.GetMenu();
         }
 
-        public static bool ValidateCustomer(string username, string password)
+        public void AddProduct(string name, decimal price)
         {
-            return Accounts.Any(a => a.Username == username && a.Password == password);
+            bakeshopDataService.AddProduct(name, price);
         }
 
-        public static CustomerAccount GetCustomer(string username)
+        public bool UpdateProduct(string name, decimal newPrice)
         {
-            return Accounts.FirstOrDefault(a => a.Username == username);
+            return bakeshopDataService.UpdateProduct(name, newPrice);
         }
 
-
-        public static void AddProduct(string product, decimal price)
+        public bool DeleteProduct(string name)
         {
-            Menu.Add(product);
-            Prices.Add(price);
+            return bakeshopDataService.DeleteProduct(name);
         }
 
-        public static bool DeleteProduct(string product)
+        public decimal? SearchProduct(string name)
         {
-            int index = Menu.IndexOf(product);
-            if (index != -1)
-            {
-                Menu.RemoveAt(index);
-                Prices.RemoveAt(index);
-                return true;
-            }
-            return false;
+            return bakeshopDataService.SearchProduct(name);
         }
 
-        public static decimal? SearchProduct(string product)
+        public void SaveOrder(Order order)
         {
-            int index = Menu.IndexOf(product);
-            if (index != -1)
-                return Prices[index];
-
-            return null;
+            bakeshopDataService.SaveOrder(order);
         }
 
-        public static List<(string Name, decimal Price)> GetMenu()
+        public List<Order> GetOrders()
         {
-            var menuList = new List<(string, decimal)>();
-            for (int i = 0; i < Menu.Count; i++)
-            {
-                menuList.Add((Menu[i], Prices[i]));
-            }
-            return menuList;
+            return bakeshopDataService.GetOrders();
         }
 
-       
-        public static bool TryGetPrice(string product, out decimal price)
+        public bool ValidateCustomer(string username, string password)
         {
-            int index = Menu.IndexOf(product);
-            if (index != -1)
-            {
-                price = Prices[index];
-                return true;
-            }
-
-            price = 0;
-            return false;
+            return bakeshopDataService.ValidateCustomer(username, password);
         }
 
-       
-        public static void SaveOrder(Order order)
+        public CustomerAccount GetCustomer(string username)
         {
-            Orders.Add(order);
-        }
-
-        
-        public static List<Order> GetOrders()
-        {
-            return Orders;
+            return bakeshopDataService.GetCustomer(username);
         }
     }
 }

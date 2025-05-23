@@ -7,7 +7,7 @@ namespace BakeshopManagement.UI
 {
     public class Order_UI
     {
-        public void Customer (CustomerAccount customer)
+        public void Customer (CustomerAccount customer, BakeshopProcess process)
         {
             int customerAction;
 
@@ -34,7 +34,7 @@ namespace BakeshopManagement.UI
                     switch (customerAction)
                     {
                         case 1: // View Menu
-                            Program.Menu();
+                            Program.Menu(process);
                             break;
 
                         case 2: // Place Order
@@ -60,12 +60,12 @@ namespace BakeshopManagement.UI
                             } while (Console.ReadLine().Trim().ToLower() == "yes");
 
                             // Process all orders
-                            var receipt = BakeshopProcess.ProcessMultipleOrders(orders);
+                            var receipt = process.ProcessMultipleOrders(orders);
 
                             if (receipt.Count > 0)
                             {
                                 var order = new Order(receipt, customer.Name);  
-                                BakeshopProcess.SaveOrder(order);
+                                process.SaveOrder(order);
 
                                 Console.WriteLine("\n\t XANNE'S BAKESHOP");
                                 Console.WriteLine("Address: Somewhere in Grandline");
@@ -96,7 +96,8 @@ namespace BakeshopManagement.UI
 
                         case 3: // Logout
                             Console.WriteLine("Logging out... Returning to login.\n");
-                            Program.Main(null);  // Go back to the login screen
+                            Program.RestartLogin(process);
+                            // Go back to the login screen
                             break;
 
                         default:

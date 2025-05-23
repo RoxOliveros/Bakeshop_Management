@@ -7,8 +7,16 @@ namespace BakeshopManagement
 {
     public class LogIn_UI
     {
+        private BakeshopProcess sharedProcess;
+
+        public LogIn_UI(BakeshopProcess process)
+        {
+            sharedProcess = process;
+        }
+
         public void DisplayLogin()
         {
+           
             string usernameInput, pinInput;
 
             Console.WriteLine("== LOGIN ==");
@@ -21,21 +29,19 @@ namespace BakeshopManagement
                 Console.Write("Enter Password: ");
                 pinInput = Console.ReadLine();
 
-                if (usernameInput == BakeshopProcess.adminUsername && pinInput == BakeshopProcess.adminPin)
+                if (usernameInput == sharedProcess.adminUsername && pinInput == sharedProcess.adminPin)
                 {
                     Console.WriteLine("\n== WELCOME TO XANNE'S BAKESHOP (ADMIN) ==");
-                    Program.Admin();
+                    Program.Admin(sharedProcess);
                     break;
                 }
 
-                else if (BakeshopProcess.ValidateCustomer(usernameInput, pinInput))
+                else if (sharedProcess.ValidateCustomer(usernameInput, pinInput))
                 {
-                    CustomerAccount loggedInCustomer = BakeshopProcess.GetCustomer(usernameInput);
-                    Console.WriteLine($"\n== WELCOME TO XANNE'S BAKESHOP, {loggedInCustomer.Name.ToUpper()}! ==");
-
-                    Order_UI orderUI = new Order_UI();
-                    orderUI.Customer(loggedInCustomer);
-                    break;
+                    var customer = sharedProcess.GetCustomer(usernameInput);  
+                    Console.WriteLine($"\n== Welcome, {customer.Name}! ==");
+                    var ui = new Order_UI();
+                    ui.Customer(customer, sharedProcess);
                 }
                 else
                 {

@@ -8,23 +8,26 @@ namespace BakeshopManagement
     {
         public static void Main(string[] args)
         {
-            LogIn_UI loginUI = new LogIn_UI();
-            loginUI.DisplayLogin();
-
-            // Admin menu after successful login
-            Admin();
+            var sharedProcess = new BakeshopProcess();  // Create shared instance
+            RestartLogin(sharedProcess);
         }
 
-        public static void Admin()
+        public static void RestartLogin(BakeshopProcess process)
+        {
+            LogIn_UI loginUI = new LogIn_UI(process);
+            loginUI.DisplayLogin();
+        }
+
+        public static void Admin(BakeshopProcess process)
         {
             int adminAction;
-
+           
             do
             {
-                string[] actions = new string[] { 
-                    "[1] Add Product", 
+                string[] actions = new string[] {
+                    "[1] Add Product",
                     "[2] Delete Product",
-                    "[3] Search Product", 
+                    "[3] Search Product",
                     "[4] View Menu",
                     "[5] View Orders",
                     "[6] Logout"  };
@@ -37,7 +40,7 @@ namespace BakeshopManagement
                 }
 
                 Console.Write("Enter Action: ");
-               
+
                 if (int.TryParse(Console.ReadLine(), out adminAction))
                 {
                     switch (adminAction)
@@ -52,13 +55,13 @@ namespace BakeshopManagement
                             {
                                 if (!string.IsNullOrEmpty(product))
                                 {
-                                    if (BakeshopProcess.SearchProduct(product).HasValue)
+                                    if (process.SearchProduct(product).HasValue)
                                     {
                                         Console.WriteLine($"{product} already exists in the menu. Cannot add duplicates.");
                                     }
                                     else
                                     {
-                                        BakeshopProcess.AddProduct(product, price);
+                                        process.AddProduct(product, price);
                                         Console.WriteLine($"{product} [ P{price} ] has been added to the menu.");
                                     }
                                 }
@@ -78,7 +81,7 @@ namespace BakeshopManagement
                             Console.Write("Enter product to delete: ");
                             string productDelete = Console.ReadLine();
 
-                            if (BakeshopProcess.DeleteProduct(productDelete))
+                            if (process.DeleteProduct(productDelete))
                             {
                                 Console.WriteLine($"{productDelete} has been removed from the menu.");
                             }
@@ -93,7 +96,7 @@ namespace BakeshopManagement
                             Console.Write("Enter product name to search: ");
                             string searchItem = Console.ReadLine();
 
-                            var result = BakeshopProcess.SearchProduct(searchItem);
+                            var result = process.SearchProduct(searchItem);
 
                             if (result.HasValue)
                             {
@@ -106,16 +109,16 @@ namespace BakeshopManagement
                             break;
 
                         case 4: // Display the menu
-                            Menu();
+                            Menu(process);
                             break;
 
                         case 5: // View Orders
-                            DisplayOrders();
+                            DisplayOrders(process);
                             break;
 
                         case 6: // Logout
                             Console.WriteLine("Logging out... Returning to login.\n");
-                            Main(null);
+                            Program.RestartLogin(process);
                             break;
 
 
@@ -126,12 +129,14 @@ namespace BakeshopManagement
                     Console.WriteLine("Invalid input. Please enter a number.");
                 }
 
-                } while (adminAction != 5) ;
-            }
+            } while (adminAction != 6);
+        }
 
-        public static void Menu() {
+
+        public static void Menu(BakeshopProcess process)
+        {
             Console.WriteLine("\n===== MENU ITEMS =====");
-            var menu = BakeshopProcess.GetMenu();
+            var menu = process.GetMenu();
 
             if (menu.Count == 0)
             {
@@ -141,17 +146,15 @@ namespace BakeshopManagement
             {
                 for (int i = 0; i < menu.Count; i++)
                 {
-                    
                     Console.WriteLine($"{i + 1}. {menu[i].Name} [ P{menu[i].Price} ]");
                 }
             }
         }
 
-        public static void DisplayOrders()
+        public static void DisplayOrders(BakeshopProcess process)
         {
-
             Console.WriteLine("\n===== CUSTOMER ORDERS =====");
-            var orders = BakeshopProcess.GetOrders();
+            var orders = process.GetOrders();
 
             if (orders.Count == 0)
             {
@@ -171,6 +174,5 @@ namespace BakeshopManagement
                 }
             }
         }
-
     }
 }

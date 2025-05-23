@@ -1,52 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using BakeshopManagement.Data;
+using Bakeshop_DataLogic;
 using Bakeshop_Common;
 
 namespace BakeshopManagement.Business
 {
-    public static class BakeshopProcess
+    public class BakeshopProcess
     {
-       
-        public static string adminUsername = "admin";
-        public static string adminPin = "123";
-        public static bool ValidateCustomer(string username, string password)
+        private BakeshopDataService dataService = new BakeshopDataService();
+
+        public string adminUsername = "admin";
+        public string adminPin = "123";
+
+        public bool ValidateCustomer(string username, string password)
         {
-            return BakeshopRepository.ValidateCustomer(username, password);
+            return dataService.ValidateCustomer(username, password);
         }
 
-        public static CustomerAccount GetCustomer(string username)
+        public CustomerAccount GetCustomer(string username)
         {
-            return BakeshopRepository.GetCustomer(username);
+            return dataService.GetCustomer(username);
         }
     
-        public static void AddProduct(string product, decimal price)
+        public void AddProduct(string product, decimal price)
         {
-            BakeshopRepository.AddProduct(product, price);
+            dataService.AddProduct(product, price);
         }
 
-        public static bool DeleteProduct(string product)
+        public bool DeleteProduct(string product)
         {
-            return BakeshopRepository.DeleteProduct(product);
+            return dataService.DeleteProduct(product);
         }
     
-        public static List<(string Name, decimal Price)> GetMenu()
+        public List<(string Name, decimal Price)> GetMenu()
         {
-            return BakeshopRepository.GetMenu();
+            return dataService.GetMenu();
         }
 
-        public static decimal? SearchProduct(string product)
+        public decimal? SearchProduct(string product)
         {
-            return BakeshopRepository.SearchProduct(product);
+            return dataService.SearchProduct(product);
         }
 
-        public static bool IsProductAvailable(string product, out decimal price)
+        public bool IsProductAvailable(string product, out decimal price)
         {
-            return BakeshopRepository.TryGetPrice(product, out price);
+            var menu = dataService.GetMenu();
+            var item = menu.Find(p => p.Name.Equals(product, StringComparison.OrdinalIgnoreCase));
+            if (item.Name != null)
+            {
+                price = item.Price;
+                return true;
+            }
+
+            price = 0;
+            return false;
         }
 
-       
-        public static List<OrderItem> ProcessMultipleOrders(List<(string product, int quantity)> orders)
+        public List<OrderItem> ProcessMultipleOrders(List<(string product, int quantity)> orders)
         {
             var result = new List<OrderItem>();
 
@@ -66,15 +76,15 @@ namespace BakeshopManagement.Business
             return result;
         }
 
-        public static void SaveOrder(Order order)
+        public void SaveOrder(Order order)
         {
-            BakeshopRepository.SaveOrder(order); 
+            dataService.SaveOrder(order); 
         }
 
 
-        public static List<Order> GetOrders()
+        public List<Order> GetOrders()
         {
-            return BakeshopRepository.GetOrders();
+            return dataService.GetOrders();
         }
     }
 }
