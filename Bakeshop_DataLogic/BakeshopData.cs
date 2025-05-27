@@ -10,8 +10,9 @@ namespace Bakeshop_DataLogic
         {
             // You can switch between data sources here:
             // bakeshopDataService = new TextFileBakeshopDataSource();
-           // bakeshopDataService = new InMemoryBakeshopDataSource();
-             bakeshopDataService = new JsonFileBakeshopDataSource();
+            bakeshopDataService = new InMemoryBakeshopDataSource();
+            // bakeshopDataService = new JsonFileBakeshopDataSource();
+           // bakeshopDataService = new DBBakeshopDataSource(); 
         }
 
         public List<(string Name, decimal Price)> GetMenu()
