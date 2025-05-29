@@ -11,12 +11,18 @@
     <Compile Remove="Bakeshop_BusinessDataLogic\**" />
     <Compile Remove="Bakeshop_Common\**" />
     <Compile Remove="Bakeshop_DataLogic\**" />
+    <Compile Remove="Bakeshop_DesktopApp\**" />
+    <Compile Remove="GUI_Images\**" />
     <EmbeddedResource Remove="Bakeshop_BusinessDataLogic\**" />
     <EmbeddedResource Remove="Bakeshop_Common\**" />
     <EmbeddedResource Remove="Bakeshop_DataLogic\**" />
+    <EmbeddedResource Remove="Bakeshop_DesktopApp\**" />
+    <EmbeddedResource Remove="GUI_Images\**" />
     <None Remove="Bakeshop_BusinessDataLogic\**" />
     <None Remove="Bakeshop_Common\**" />
     <None Remove="Bakeshop_DataLogic\**" />
+    <None Remove="Bakeshop_DesktopApp\**" />
+    <None Remove="GUI_Images\**" />
   </ItemGroup>
 
   <ItemGroup>

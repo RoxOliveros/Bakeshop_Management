@@ -33,7 +33,7 @@ namespace BakeshopManagement
                 {
                     Console.WriteLine("\n== WELCOME TO XANNE'S BAKESHOP (ADMIN) ==");
                     Program.Admin(sharedProcess);
-                    break;
+                    break; 
                 }
 
                 else if (sharedProcess.ValidateCustomer(usernameInput, pinInput))

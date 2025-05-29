@@ -2,93 +2,104 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Bakeshop_DataLogic
 {
-    class DBBakeshopDataSource : IBakeshopDataService
+    public class DBBakeshopDataSource : IBakeshopDataService
     {
+        private string connectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=DBBakeshop;Integrated Security=True;TrustServerCertificate=True;";
+        private List<Order> Orders = new List<Order>();
         private List<string> Menu = new List<string>();
         private List<decimal> Prices = new List<decimal>();
-        private List<Order> Orders = new List<Order>();
-        private List<CustomerAccount> Accounts = new List<CustomerAccount>();
-
-        static string connectionString = "Data Source=SQLEXPRESS;Initial Catalog=DBBakeshop;Integrated Security=True;TrustServerCertificate=True;";
-        static SqlConnection sqlConnection;
 
         public DBBakeshopDataSource()
         {
-            sqlConnection = new SqlConnection(connectionString);
-            Accounts = GetCustomerAccounts(); // Load accounts at start
+            LoadCustomerAccounts(); // Loads into memory if needed
         }
+
+        private void LoadCustomerAccounts()
+        {
+            try
+            {
+                Accounts = GetCustomerAccounts(); // Fills Accounts list from DB
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to load customer accounts: " + ex.Message);
+            }
+        }
+
+        private List<CustomerAccount> Accounts = new List<CustomerAccount>();
 
         public List<CustomerAccount> GetCustomerAccounts()
         {
             var customerAccounts = new List<CustomerAccount>();
 
-            string query = "SELECT * FROM Accounts";
-            SqlCommand command = new SqlCommand(query, sqlConnection);
-            sqlConnection.Open();
-
-            SqlDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            using (var sqlConnection = new SqlConnection(connectionString))
+            using (var command = new SqlCommand("SELECT * FROM Accounts", sqlConnection))
             {
-                customerAccounts.Add(new CustomerAccount
+                sqlConnection.Open();
+                using (var reader = command.ExecuteReader())
                 {
-                    Name = reader["Name"].ToString(),
-                    Username = reader["Username"].ToString(),
-                    Password = reader["Password"].ToString(),
-                    Email = reader["Email"].ToString()
-                });
+                    while (reader.Read())
+                    {
+                        customerAccounts.Add(new CustomerAccount
+                        {
+                            Name = reader["Name"].ToString(),
+                            Username = reader["Username"].ToString(),
+                            Password = reader["Password"].ToString(),
+                            Email = reader["Email"].ToString()
+                        });
+                    }
+                }
             }
-
-            reader.Close();
-            sqlConnection.Close();
 
             return customerAccounts;
         }
 
         public bool ValidateCustomer(string username, string password)
         {
-            string query = "SELECT COUNT(*) FROM Accounts WHERE Username = @Username AND Password = @Password";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
+            using (var command = new SqlCommand("SELECT COUNT(*) FROM Accounts WHERE Username = @Username AND Password = @Password", sqlConnection))
             {
-                SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@Username", username);
                 command.Parameters.AddWithValue("@Password", password);
 
-                connection.Open();
+                sqlConnection.Open();
                 int count = (int)command.ExecuteScalar();
                 return count > 0;
             }
         }
 
-
         public CustomerAccount GetCustomer(string username)
         {
-            string query = "SELECT * FROM Accounts WHERE Username = '" + username + "'";
-            SqlCommand command = new SqlCommand(query, sqlConnection);
-            sqlConnection.Open();
-
-            SqlDataReader reader = command.ExecuteReader();
-            CustomerAccount account = null;
-
-            if (reader.Read())
+            using (var sqlConnection = new SqlConnection(connectionString))
+            using (var command = new SqlCommand("SELECT * FROM Accounts WHERE Username = @Username", sqlConnection))
             {
-                account = new CustomerAccount
+                command.Parameters.AddWithValue("@Username", username);
+
+                sqlConnection.Open();
+                using (var reader = command.ExecuteReader())
                 {
-                    Name = reader["Name"].ToString(),
-                    Username = reader["Username"].ToString(),
-                    Password = reader["Password"].ToString(),
-                    Email = reader["Email"].ToString()
-                };
+                    if (reader.Read())
+                    {
+                        return new CustomerAccount
+                        {
+                            Name = reader["Name"].ToString(),
+                            Username = reader["Username"].ToString(),
+                            Password = reader["Password"].ToString(),
+                            Email = reader["Email"].ToString()
+                        };
+                    }
+                }
             }
 
-            reader.Close();
-            sqlConnection.Close();
-            return account;
+            return null;
         }
 
+        // Other in-memory menu/product operations (for now)
         public void AddProduct(string product, decimal price)
         {
             Menu.Add(product);
@@ -139,8 +150,7 @@ namespace Bakeshop_DataLogic
 
         public void SaveOrder(Order order)
         {
-            Orders.Add(order);
-        }
+            Orders.Add(order); 
 
         public List<Order> GetOrders()
         {
