@@ -21,25 +21,110 @@ namespace BakeshopManagement.Business
         {
             return dataService.GetCustomer(username);
         }
-    
-        public void AddProduct(string product, decimal price)
+
+        public bool RegisterCustomer(CustomerAccount newAccount)
         {
-            dataService.AddProduct(product, price);
+            return dataService.RegisterCustomerAccount(newAccount);
         }
 
-        public bool DeleteProduct(string product)
+
+        public bool AddProduct(Product product)
         {
-            return dataService.DeleteProduct(product);
+            return dataService.AddProduct(product);
         }
-    
+
+   
+        public List<Product> GetAllProducts()
+        {
+            return dataService.GetAllProducts();
+        }
+
+
+        public bool DeleteProduct(string productName)
+        {
+            return dataService.DeleteProduct(productName);
+        }
+
+        public List<Product> GetProductsByCategory(string category)
+        {
+            return dataService.GetProductsByCategory(category);
+        }
+
+        public bool UpdateProduct(Product updatedProduct)
+        {
+            return dataService.UpdateProduct(updatedProduct);
+        }
+
+
+        public bool AddToCartProduct(Cart cart)
+        {
+
+            return dataService.AddToCartProduct(cart);
+
+        }
+
+        public List<Cart> GetCartItems(int userId)
+        {
+
+            return dataService.GetCartItems(userId);
+
+        }
+
+        public bool UpdateCartItem(Cart cart) {
+
+            return dataService.UpdateCartItem(cart);
+        
+        }
+
+
+        public bool DeleteCartItem(int cartId) {
+
+            return dataService.DeleteCartItem(cartId);
+        }
+
+        public bool SaveOrder(int userId, List<Cart> cartItems, out int newOrderId) {
+
+            return dataService.SaveOrder(userId, cartItems, out newOrderId);
+        
+        }
+
+        public bool AddToFavorites(int userId, int productId)
+        {
+            return dataService.AddToFavorites(userId, productId);
+
+        }
+
+        public bool RemoveFromFavorites(int userId, int productId)
+        {
+
+            return dataService.RemoveFromFavorites(userId, productId);
+        }
+
+        public bool IsFavorite(int userId, int productId) {
+            return dataService.IsFavorite(userId, productId);
+        
+        }
+
+        public List<DbOrder> GetAllPendingOrders()
+        {
+            return dataService.GetAllPendingOrders();
+
+        }
+
+        public List<OrderDetail> GetOrderDetails(int orderId) {
+
+            return dataService.GetOrderDetails(orderId);
+        }
+
+        // ----------------------------------------------------------
         public List<(string Name, decimal Price)> GetMenu()
         {
             return dataService.GetMenu();
         }
 
-        public decimal? SearchProduct(string product)
+        public List<Product> SearchProduct(string searchName)
         {
-            return dataService.SearchProduct(product);
+            return dataService.SearchProduct(searchName);
         }
 
         public bool IsProductAvailable(string product, out decimal price)

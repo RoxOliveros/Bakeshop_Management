@@ -55,15 +55,15 @@ namespace BakeshopManagement
                             {
                                 if (!string.IsNullOrEmpty(product))
                                 {
-                                    if (process.SearchProduct(product).HasValue)
-                                    {
-                                        Console.WriteLine($"{product} already exists in the menu. Cannot add duplicates.");
-                                    }
-                                    else
-                                    {
-                                        process.AddProduct(product, price);
-                                        Console.WriteLine($"{product} [ P{price} ] has been added to the menu.");
-                                    }
+                                    //if (process.SearchProduct(product))
+                                    //{
+                                    //    Console.WriteLine($"{product} already exists in the menu. Cannot add duplicates.");
+                                    //}
+                                    //else
+                                    //{
+                                    //   // process.AddProduct(product, price);
+                                    //    Console.WriteLine($"{product} [ P{price} ] has been added to the menu.");
+                                    //}
                                 }
                                 else
                                 {
@@ -98,14 +98,14 @@ namespace BakeshopManagement
 
                             var result = process.SearchProduct(searchItem);
 
-                            if (result.HasValue)
-                            {
-                                Console.WriteLine($"{searchItem} is available in the menu for P{result}.");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"{searchItem} is not in the menu.");
-                            }
+                            //if (result.HasValue)
+                            //{
+                            //    Console.WriteLine($"{searchItem} is available in the menu for P{result}.");
+                            //}
+                            //else
+                            //{
+                            //    Console.WriteLine($"{searchItem} is not in the menu.");
+                            //}
                             break;
 
                         case 4: // Display the menu

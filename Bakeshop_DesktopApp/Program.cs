@@ -9,11 +9,23 @@ namespace Bakeshop_DesktopApp
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
 
-            var process = new BakeshopProcess();
-            Application.Run(new Login(process));
+                var process = new BakeshopProcess();
+                Application.Run(new Login(process));
+
+                //taskkill /IM Bakeshop_DesktopApp.exe /F
+
+              //Application.Run(new User_Menu(process, customer));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Startup error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
+
 }

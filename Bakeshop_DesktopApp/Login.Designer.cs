@@ -49,6 +49,7 @@
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(233, 23);
             txtUsername.TabIndex = 0;
+            txtUsername.TextChanged += txtUsername_TextChanged;
             // 
             // lblUsername
             // 
@@ -73,7 +74,6 @@
             lblPass.Size = new Size(65, 16);
             lblPass.TabIndex = 3;
             lblPass.Text = "Password:";
-            
             // 
             // txtPass
             // 
@@ -125,8 +125,9 @@
             button1.Name = "button1";
             button1.Size = new Size(121, 30);
             button1.TabIndex = 6;
-            button1.Text = "Click here to register ";
+            button1.Text = "Click here to register";
             button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // Login
             // 
@@ -148,6 +149,7 @@
             Name = "Login";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login";
+            Load += Login_Load;
             ResumeLayout(false);
             PerformLayout();
         }

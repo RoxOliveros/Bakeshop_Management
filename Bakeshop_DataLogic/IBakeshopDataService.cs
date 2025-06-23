@@ -9,17 +9,45 @@ namespace Bakeshop_DataLogic
 {
     public interface IBakeshopDataService
     {
-        void AddProduct(string name, decimal price);
-        bool UpdateProduct(string name, decimal newPrice);
+        bool AddProduct(Product product);
+        List<Product> GetAllProducts();
+
+        bool UpdateProduct(Product updatedProduct);
         bool DeleteProduct(string name);
-        decimal? SearchProduct(string name);
+        List<Product> SearchProduct(string searchTerm);
+
+
         List<(string Name, decimal Price)> GetMenu();
 
         void SaveOrder (Order order);
         List<Order> GetOrders();
 
+
         bool ValidateCustomer(string username, string password);
         CustomerAccount GetCustomer(string username);
+        bool RegisterCustomerAccount(CustomerAccount account);
+
+        List<Product> GetProductsByCategory(string category);
+
+        bool AddToCartProduct(Cart cart);
+        List <Cart> GetCartItems(int userId);
+
+        bool UpdateCartItem(Cart cart);
+
+        bool DeleteCartItem(int cart);
+
+        bool SaveOrder(int userId, List<Cart> cartItems, out int newOrderId);
+
+        bool AddToFavorites(int userId, int productId);
+
+        bool RemoveFromFavorites(int userId, int productId);
+
+        bool IsFavorite(int userId, int productId);
+
+        List<DbOrder> GetAllPendingOrders();
+
+        List<OrderDetail> GetOrderDetails(int orderId);
+
 
     }
 }

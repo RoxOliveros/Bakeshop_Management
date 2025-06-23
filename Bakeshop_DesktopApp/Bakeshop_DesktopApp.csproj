@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Bakeshop_BusinessLogic">
       <HintPath>..\Bakeshop_BusinessDataLogic\bin\Debug\net8.0\Bakeshop_BusinessLogic.dll</HintPath>
     </Reference>
