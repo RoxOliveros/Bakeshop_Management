@@ -158,8 +158,8 @@ namespace Bakeshop_DesktopApp
 
         private void btnAddtoCart_Click(object sender, EventArgs e)
         {
-           
-           
+
+
             string selectedOption = null;
             decimal unitPrice = 0;
 
@@ -189,11 +189,11 @@ namespace Bakeshop_DesktopApp
             int quantity = int.Parse(lblQuantity.Text);
             decimal total = unitPrice * quantity;
 
-          
+
             Cart cartItem = new Cart
             {
                 ProductID = selectedProduct.ProductId,
-                UserID = currentUserId, 
+                UserID = currentUserId,
                 SelectedOption = selectedOption,
                 UnitPrice = unitPrice,
                 Quantity = quantity,
@@ -204,11 +204,9 @@ namespace Bakeshop_DesktopApp
             };
 
 
-            // 3. Save to database
-            MessageBox.Show($"Adding to cart:\nUserID: {currentUserId}\nProductID: {selectedProduct.ProductId}");
+          
 
-
-            bool success = process.AddToCartProduct(cartItem); 
+            bool success = process.AddToCartProduct(cartItem);
 
             if (success)
             {
@@ -221,6 +219,10 @@ namespace Bakeshop_DesktopApp
             }
         }
 
+        private void AddToCart_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

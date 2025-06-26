@@ -48,6 +48,14 @@ namespace Bakeshop_DataLogic
 
         List<OrderDetail> GetOrderDetails(int orderId);
 
+        CustomerAccount GetCustomerById(int userId);
+
+        bool MarkOrderAsComplete(int orderId);
+
+        bool MarkOrderAsCancelled(int orderId);
+
+        List<DbOrder> GetAllCompletedOrders();
+
 
     }
 }

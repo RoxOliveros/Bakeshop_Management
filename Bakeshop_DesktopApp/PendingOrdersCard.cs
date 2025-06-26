@@ -18,11 +18,23 @@ namespace Bakeshop_DesktopApp
             InitializeComponent();
         }
 
-        public void LoadOrderDetails(Order order, List<OrderDetail> orderItems, CustomerAccount customer)
+        private int _orderId;
+        private string _orderStatus; // store status for validation
+
+        public event Action<int> OrderMarkedComplete;
+        public event Action<int> OrderMarkedCancelled;
+
+
+
+
+        public void LoadOrderDetails(DbOrder order, List<OrderDetail> orderItems, CustomerAccount customer)
         {
-            lblOrderID.Text = $"Order #{order.OrderId}";
-            lblCustomerName.Text = $" 👤   {customer.Name}";
-            lblDateOfOrder.Text = $"🗓️{ order.Timestamp.ToString("MMM dd, yyyy hh:mm tt")}";
+            _orderId = order.OrderID;
+            _orderStatus = order.Status; // e.g., "Pending"
+
+            lblOrderID.Text = $"Order #{order.OrderID}";
+            lblCustomerName.Text = $"👤 {customer.Name}";
+            lblDateOfOrder.Text = $"🗓️ {order.OrderDate:MMM dd, yyyy hh:mm tt}";
             lblTotal.Text = $"TOTAL: ₱{order.TotalAmount:0.00}";
 
             StringBuilder sb = new StringBuilder();
@@ -35,6 +47,37 @@ namespace Bakeshop_DesktopApp
             }
 
             lblOrderedItem.Text = sb.ToString();
+        }
+
+
+        private void btnComplete_Click(object sender, EventArgs e)
+        {
+            if (_orderStatus != "Pending")
+            {
+                MessageBox.Show("Only pending orders can be marked as complete.", "Invalid Action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show("Are you sure you want to mark this order as COMPLETE?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm == DialogResult.Yes)
+            {
+                OrderMarkedComplete?.Invoke(_orderId);
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            if (_orderStatus != "Pending")
+            {
+                MessageBox.Show("Only pending orders can be cancelled.", "Invalid Action", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show("Are you sure you want to CANCEL this order?", "Confirm Cancel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (confirm == DialogResult.Yes)
+            {
+                OrderMarkedCancelled?.Invoke(_orderId);
+            }
         }
     }
 }

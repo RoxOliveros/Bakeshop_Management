@@ -116,6 +116,32 @@ namespace BakeshopManagement.Business
             return dataService.GetOrderDetails(orderId);
         }
 
+
+        public CustomerAccount GetCustomerById(int userId) {
+
+            return dataService.GetCustomerById(userId);
+        }
+
+
+        public bool MarkOrderAsComplete(int orderId)
+        {
+
+            return dataService.MarkOrderAsComplete(orderId);
+        }
+
+        public bool MarkOrderAsCancelled(int orderId)
+        {
+            return dataService.MarkOrderAsCancelled(orderId);
+
+        }
+
+        public List<DbOrder> GetAllCompletedOrders()
+        {
+
+            return dataService.GetAllCompletedOrders();
+        }
+
+
         // ----------------------------------------------------------
         public List<(string Name, decimal Price)> GetMenu()
         {

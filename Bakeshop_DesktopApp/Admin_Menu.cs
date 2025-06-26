@@ -11,6 +11,8 @@ using System.Windows.Forms;
 
 using Bakeshop_Common;
 using BakeshopManagement.Business;
+using Bakeshop_SalesReport;
+
 
 namespace Bakeshop_DesktopApp
 {
@@ -124,17 +126,51 @@ namespace Bakeshop_DesktopApp
             ReloadProducts();
         }
 
-        private void btnLogout_Click(object sender, EventArgs e)
-        {
-            Logout();
 
-        }
 
         private void btnOrder_Click(object sender, EventArgs e)
         {
             Admin_Orders orderForm = new Admin_Orders();
             orderForm.Show();
             this.Hide();
+        }
+
+        private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            Logout();
+        }
+
+        private void btnSales_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BakeshopProcess process = new BakeshopProcess();
+                List<DbOrder> completedOrders = process.GetAllCompletedOrders();
+
+                if (completedOrders == null || completedOrders.Count == 0)
+                {
+                    MessageBox.Show("No completed sales found.");
+                    return;
+                }
+
+                var salesChartForm = new Bakeshop_SalesReport.Admin_Sales(completedOrders);
+
+                // These help make sure the form shows up
+                salesChartForm.StartPosition = FormStartPosition.CenterScreen;
+                salesChartForm.TopMost = true;
+
+                salesChartForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error displaying sales chart: " + ex.Message);
+            }
+
+        }
+
+        private void txtSearchAdmin_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

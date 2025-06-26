@@ -43,8 +43,8 @@ namespace Bakeshop_DesktopApp
         protected override void DisplayProduct(Product product)
         {
             addToCartCard card = new addToCartCard();
-            card.SetUserId(customer.UserID);     
-            card.SetProcess(process);            
+            card.SetUserId(customer.UserID);
+            card.SetProcess(process);
             card.SetProduct(product);
             flowLayoutPanelProducts.Controls.Add(card);
 
@@ -134,8 +134,7 @@ namespace Bakeshop_DesktopApp
         {
             bool success = process.DeleteCartItem(cart.CartID); // Pass only cartID
 
-            Debug.WriteLine($"Attempting to delete CartID: {cart.CartID}"); // <--- ADD THIS
-
+          
             if (success)
             {
                 LoadCheckoutArea(); // Refresh the display
@@ -163,7 +162,7 @@ namespace Bakeshop_DesktopApp
                 return;
             }
 
-            bool success = process.SaveOrder (customer.UserID, cartItems, out int orderId);
+            bool success = process.SaveOrder(customer.UserID, cartItems, out int orderId);
             if (success)
             {
                 MessageBox.Show($"Order #{orderId} placed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -173,6 +172,11 @@ namespace Bakeshop_DesktopApp
             {
                 MessageBox.Show("Failed to process checkout.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            Logout();
         }
     }
 }

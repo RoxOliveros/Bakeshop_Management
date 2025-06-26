@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddToCart));
             lblProductName = new Label();
             label1 = new Label();
             btnAddtoCart = new Button();
@@ -275,11 +276,13 @@
             Controls.Add(lblQuantity);
             Controls.Add(btnAdd);
             Controls.Add(btnAddtoCart);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
             Name = "AddToCart";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AddToCart";
+            Load += AddToCart_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBoxCart).EndInit();
             ResumeLayout(false);
             PerformLayout();

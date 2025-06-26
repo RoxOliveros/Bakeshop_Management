@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36121.58
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bakeshop_DesktopApp", "Bakeshop_DesktopApp.csproj", "{1F56BEDA-9F42-4077-883C-4EF622940C59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bakeshop_SalesReport", "..\Bakeshop_SalesReport\Bakeshop_SalesReport.csproj", "{F82B4DD4-D4E6-40AD-AF0E-54EAC16CE700}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1F56BEDA-9F42-4077-883C-4EF622940C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F56BEDA-9F42-4077-883C-4EF622940C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F56BEDA-9F42-4077-883C-4EF622940C59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F82B4DD4-D4E6-40AD-AF0E-54EAC16CE700}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F82B4DD4-D4E6-40AD-AF0E-54EAC16CE700}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F82B4DD4-D4E6-40AD-AF0E-54EAC16CE700}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F82B4DD4-D4E6-40AD-AF0E-54EAC16CE700}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

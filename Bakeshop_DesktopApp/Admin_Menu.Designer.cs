@@ -42,9 +42,10 @@
             flowLayoutPanelAdmin = new FlowLayoutPanel();
             btnCookie = new Button();
             btnLoad = new Button();
-            button3 = new Button();
+            btnSales = new Button();
             btnOrder = new Button();
             button1 = new Button();
+            btnLogout = new Button();
             SuspendLayout();
             // 
             // label1
@@ -71,6 +72,7 @@
             txtSearchAdmin.PlaceholderText = "  Search product name";
             txtSearchAdmin.Size = new Size(285, 28);
             txtSearchAdmin.TabIndex = 22;
+            txtSearchAdmin.TextChanged += txtSearchAdmin_TextChanged;
             // 
             // btnSearch
             // 
@@ -208,19 +210,20 @@
             btnLoad.UseVisualStyleBackColor = true;
             btnLoad.Click += btnLoad_Click;
             // 
-            // button3
+            // btnSales
             // 
-            button3.BackColor = Color.FromArgb(255, 241, 236);
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button3.ForeColor = Color.FromArgb(153, 78, 36);
-            button3.Location = new Point(260, 61);
-            button3.Name = "button3";
-            button3.Size = new Size(85, 23);
-            button3.TabIndex = 61;
-            button3.Text = "✦ SALES";
-            button3.UseVisualStyleBackColor = false;
+            btnSales.BackColor = Color.FromArgb(255, 241, 236);
+            btnSales.FlatAppearance.BorderSize = 0;
+            btnSales.FlatStyle = FlatStyle.Flat;
+            btnSales.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSales.ForeColor = Color.FromArgb(153, 78, 36);
+            btnSales.Location = new Point(260, 61);
+            btnSales.Name = "btnSales";
+            btnSales.Size = new Size(85, 23);
+            btnSales.TabIndex = 61;
+            btnSales.Text = "✦ SALES";
+            btnSales.UseVisualStyleBackColor = false;
+            btnSales.Click += btnSales_Click;
             // 
             // btnOrder
             // 
@@ -251,6 +254,21 @@
             button1.Text = "☰  MENU";
             button1.UseVisualStyleBackColor = false;
             // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.Transparent;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Century Gothic", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLogout.ForeColor = Color.FromArgb(167, 103, 84);
+            btnLogout.Location = new Point(0, 12);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(60, 41);
+            btnLogout.TabIndex = 62;
+            btnLogout.Text = "🏠";
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click_1;
+            // 
             // Admin_Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -259,7 +277,8 @@
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(899, 532);
-            Controls.Add(button3);
+            Controls.Add(btnLogout);
+            Controls.Add(btnSales);
             Controls.Add(btnOrder);
             Controls.Add(button1);
             Controls.Add(btnLoad);
@@ -298,8 +317,9 @@
         private FlowLayoutPanel flowLayoutPanelAdmin;
         private Button btnCookie;
         private Button btnLoad;
-        private Button button3;
+        private Button btnSales;
         private Button btnOrder;
         private Button button1;
+        private Button btnLogout;
     }
 }

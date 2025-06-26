@@ -429,8 +429,8 @@ namespace Bakeshop_DataLogic
             decimal grandTotal = cartItems.Sum(c => c.TotalPrice);
 
             string insertOrder = "INSERT INTO Orders (userID, orderDate, totalAmount, status) OUTPUT INSERTED.orderID VALUES (@UserID, @Date, @Total, @Status)";
-            string insertDetail = @"INSERT INTO OrderDetails (orderID, productID, selectedOption, unitPrice, quantity, totalPrice) 
-                            VALUES (@OrderID, @ProductID, @Option, @UnitPrice, @Qty, @TotalPrice)";
+            string insertDetail = @"INSERT INTO OrderDetails (orderID, productID, selectedOption, unitPrice, quantity, totalPrice, instructions) 
+            VALUES (@OrderID, @ProductID, @Option, @UnitPrice, @Qty, @TotalPrice, @Instructions)";
 
             SqlTransaction transaction = null;
 
@@ -446,6 +446,7 @@ namespace Bakeshop_DataLogic
                     cmdOrder.Parameters.AddWithValue("@Total", grandTotal);
                     cmdOrder.Parameters.AddWithValue("@Status", "Pending");
 
+
                     newOrderId = (int)cmdOrder.ExecuteScalar(); // Get inserted order ID
                 }
 
@@ -459,6 +460,7 @@ namespace Bakeshop_DataLogic
                         cmdDetail.Parameters.AddWithValue("@UnitPrice", item.UnitPrice);
                         cmdDetail.Parameters.AddWithValue("@Qty", item.Quantity);
                         cmdDetail.Parameters.AddWithValue("@TotalPrice", item.TotalPrice);
+                        cmdDetail.Parameters.AddWithValue("@Instructions", item.Instructions ?? "");
 
                         cmdDetail.ExecuteNonQuery();
                     }
@@ -571,7 +573,7 @@ namespace Bakeshop_DataLogic
         {
             var details = new List<OrderDetail>();
             string query = @"
-            SELECT d.*, m.productName 
+            SELECT d.detailID, d.orderID, d.productID, d.selectedOption, d.unitPrice, d.quantity, d.totalPrice, d.instructions, m.productName
             FROM OrderDetails d
             JOIN Menu m ON d.productID = m.productID
             WHERE d.orderID = @OrderID";
@@ -591,7 +593,7 @@ namespace Bakeshop_DataLogic
                         SelectedOption = reader["selectedOption"].ToString(),
                         UnitPrice = (decimal)reader["unitPrice"],
                         Quantity = (int)reader["quantity"],
-                        Instructions = "", 
+                        Instructions = reader["instructions"]?.ToString() ?? ""
                     });
                 }
 
@@ -604,7 +606,7 @@ namespace Bakeshop_DataLogic
         public CustomerAccount GetCustomerById(int userId)
         {
             CustomerAccount customer = null;
-            string query = "SELECT * FROM Accounts WHERE userID = @UserID";
+            string query = "SELECT * FROM UserAccounts WHERE userID = @UserID";
 
             using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
             {
@@ -627,6 +629,84 @@ namespace Bakeshop_DataLogic
 
             return customer;
         }
+
+
+        public bool MarkOrderAsComplete(int orderId)
+        {
+            string query = @"
+        UPDATE Orders 
+        SET status = 'Complete' 
+        WHERE orderID = @OrderID AND status = 'Pending'";
+
+            using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+            {
+                cmd.Parameters.AddWithValue("@OrderID", orderId);
+
+                sqlConnection.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+                sqlConnection.Close();
+
+                return rowsAffected > 0;
+            }
+        }
+
+        public bool MarkOrderAsCancelled(int orderId)
+        {
+            string query = "UPDATE Orders SET status = 'Cancelled' WHERE orderID = @OrderID";
+
+            using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+            {
+                cmd.Parameters.AddWithValue("@OrderID", orderId);
+                sqlConnection.Open();
+                int result = cmd.ExecuteNonQuery();
+                sqlConnection.Close();
+                return result > 0;
+            }
+        }
+
+
+        public List<DbOrder> GetAllCompletedOrders()
+        {
+            List<DbOrder> orders = new List<DbOrder>();
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                string query = @"
+            SELECT OrderID, UserID, OrderDate, TotalAmount, Status
+            FROM Orders
+            WHERE Status = 'Complete'";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    orders.Add(new DbOrder
+                    {
+                        OrderID = reader.GetInt32(0),
+                        UserID = reader.GetInt32(1),
+                        OrderDate = reader.GetDateTime(2),
+                        TotalAmount = reader.GetDecimal(3),
+                        Status = reader.GetString(4)
+                    });
+                }
+            }
+
+            return orders;
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

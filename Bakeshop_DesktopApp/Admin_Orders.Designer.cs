@@ -28,27 +28,30 @@
         /// </summary>
         private void InitializeComponent()
         {
-            button3 = new Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Admin_Orders));
+            btnSales = new Button();
             button2 = new Button();
-            button1 = new Button();
+            btnMenu = new Button();
             flowLayoutOrders = new FlowLayoutPanel();
             label1 = new Label();
-            comboBox1 = new ComboBox();
+            cmbSortOrders = new ComboBox();
+            btnLogout = new Button();
             SuspendLayout();
             // 
-            // button3
+            // btnSales
             // 
-            button3.BackColor = Color.FromArgb(255, 241, 236);
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button3.ForeColor = Color.FromArgb(153, 78, 36);
-            button3.Location = new Point(260, 61);
-            button3.Name = "button3";
-            button3.Size = new Size(85, 23);
-            button3.TabIndex = 61;
-            button3.Text = "📈 SALES";
-            button3.UseVisualStyleBackColor = false;
+            btnSales.BackColor = Color.FromArgb(255, 241, 236);
+            btnSales.FlatAppearance.BorderSize = 0;
+            btnSales.FlatStyle = FlatStyle.Flat;
+            btnSales.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSales.ForeColor = Color.FromArgb(153, 78, 36);
+            btnSales.Location = new Point(260, 61);
+            btnSales.Name = "btnSales";
+            btnSales.Size = new Size(85, 23);
+            btnSales.TabIndex = 61;
+            btnSales.Text = "📈 SALES";
+            btnSales.UseVisualStyleBackColor = false;
+            btnSales.Click += btnSales_Click;
             // 
             // button2
             // 
@@ -64,28 +67,29 @@
             button2.Text = "📄 ORDER";
             button2.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // btnMenu
             // 
-            button1.BackColor = Color.FromArgb(255, 241, 236);
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.FromArgb(153, 78, 36);
-            button1.Location = new Point(28, 61);
-            button1.Name = "button1";
-            button1.Size = new Size(85, 23);
-            button1.TabIndex = 59;
-            button1.Text = "☰  MENU";
-            button1.UseVisualStyleBackColor = false;
+            btnMenu.BackColor = Color.FromArgb(255, 241, 236);
+            btnMenu.FlatAppearance.BorderSize = 0;
+            btnMenu.FlatStyle = FlatStyle.Flat;
+            btnMenu.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnMenu.ForeColor = Color.FromArgb(153, 78, 36);
+            btnMenu.Location = new Point(28, 61);
+            btnMenu.Name = "btnMenu";
+            btnMenu.Size = new Size(85, 23);
+            btnMenu.TabIndex = 59;
+            btnMenu.Text = "☰  MENU";
+            btnMenu.UseVisualStyleBackColor = false;
+            btnMenu.Click += btnMenu_Click;
             // 
             // flowLayoutOrders
             // 
             flowLayoutOrders.AutoScroll = true;
             flowLayoutOrders.BackColor = Color.FromArgb(246, 218, 196);
             flowLayoutOrders.FlowDirection = FlowDirection.TopDown;
-            flowLayoutOrders.Location = new Point(28, 162);
+            flowLayoutOrders.Location = new Point(31, 162);
             flowLayoutOrders.Name = "flowLayoutOrders";
-            flowLayoutOrders.Size = new Size(841, 335);
+            flowLayoutOrders.Size = new Size(835, 321);
             flowLayoutOrders.TabIndex = 62;
             // 
             // label1
@@ -94,25 +98,41 @@
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Century Gothic", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(153, 78, 36);
-            label1.Location = new Point(31, 126);
+            label1.Location = new Point(31, 121);
             label1.Name = "label1";
             label1.Size = new Size(117, 28);
             label1.TabIndex = 20;
             label1.Text = "PENDING";
             // 
-            // comboBox1
+            // cmbSortOrders
             // 
-            comboBox1.BackColor = Color.FromArgb(243, 229, 219);
-            comboBox1.FlatStyle = FlatStyle.Flat;
-            comboBox1.Font = new Font("Century Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            comboBox1.ForeColor = Color.FromArgb(153, 78, 36);
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Number", "Date " });
-            comboBox1.Location = new Point(800, 134);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(66, 24);
-            comboBox1.TabIndex = 63;
-            comboBox1.Text = "Sort  by";
+            cmbSortOrders.BackColor = Color.FromArgb(243, 229, 219);
+            cmbSortOrders.FlatStyle = FlatStyle.Flat;
+            cmbSortOrders.Font = new Font("Century Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            cmbSortOrders.ForeColor = Color.FromArgb(153, 78, 36);
+            cmbSortOrders.FormattingEnabled = true;
+            cmbSortOrders.Items.AddRange(new object[] { "Newest First", "Oldest First", "Total Amount (High to Low)", "Total Amount (Low to High)" });
+            cmbSortOrders.Location = new Point(740, 129);
+            cmbSortOrders.Name = "cmbSortOrders";
+            cmbSortOrders.Size = new Size(126, 24);
+            cmbSortOrders.TabIndex = 63;
+            cmbSortOrders.Text = "Sort  by";
+            cmbSortOrders.SelectedIndexChanged += cmbSortOrders_SelectedIndexChanged;
+            // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.Transparent;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Century Gothic", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLogout.ForeColor = Color.FromArgb(167, 103, 84);
+            btnLogout.Location = new Point(0, 12);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(60, 41);
+            btnLogout.TabIndex = 64;
+            btnLogout.Text = "🏠";
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
             // 
             // Admin_Orders
             // 
@@ -121,15 +141,18 @@
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(899, 532);
-            Controls.Add(comboBox1);
+            Controls.Add(btnLogout);
+            Controls.Add(cmbSortOrders);
             Controls.Add(label1);
             Controls.Add(flowLayoutOrders);
-            Controls.Add(button3);
+            Controls.Add(btnSales);
             Controls.Add(button2);
-            Controls.Add(button1);
+            Controls.Add(btnMenu);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Admin_Orders";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Admin Dashboard";
             Load += Admin_Orders_Load;
             ResumeLayout(false);
@@ -138,11 +161,12 @@
 
         #endregion
 
-        private Button button3;
+        private Button btnSales;
         private Button button2;
-        private Button button1;
+        private Button btnMenu;
         private FlowLayoutPanel flowLayoutOrders;
         private Label label1;
-        private ComboBox comboBox1;
+        private ComboBox cmbSortOrders;
+        private Button btnLogout;
     }
 }

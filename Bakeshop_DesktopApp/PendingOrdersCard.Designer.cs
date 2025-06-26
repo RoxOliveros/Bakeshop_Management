@@ -35,8 +35,8 @@
             label7 = new Label();
             label6 = new Label();
             label8 = new Label();
-            btnCheckout = new Button();
-            button1 = new Button();
+            btnComplete = new Button();
+            btnCancel = new Button();
             lblTotal = new Label();
             lblOrderedItem = new Label();
             panel1 = new Panel();
@@ -61,11 +61,10 @@
             lblOrderID.BackColor = Color.Transparent;
             lblOrderID.Font = new Font("Century Gothic", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblOrderID.ForeColor = Color.FromArgb(64, 64, 64);
-            lblOrderID.Location = new Point(77, 23);
+            lblOrderID.Location = new Point(87, 23);
             lblOrderID.Name = "lblOrderID";
-            lblOrderID.Size = new Size(83, 15);
+            lblOrderID.Size = new Size(0, 15);
             lblOrderID.TabIndex = 48;
-            lblOrderID.Text = "(Order # 1001)";
             // 
             // lblCustomerName
             // 
@@ -125,33 +124,35 @@
             label8.TabIndex = 67;
             label8.Text = "Items:";
             // 
-            // btnCheckout
+            // btnComplete
             // 
-            btnCheckout.BackColor = Color.FromArgb(255, 212, 181);
-            btnCheckout.FlatStyle = FlatStyle.Flat;
-            btnCheckout.Font = new Font("Century Gothic", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnCheckout.ForeColor = Color.FromArgb(167, 103, 84);
-            btnCheckout.Location = new Point(32, 269);
-            btnCheckout.Margin = new Padding(4, 3, 4, 3);
-            btnCheckout.Name = "btnCheckout";
-            btnCheckout.Size = new Size(81, 23);
-            btnCheckout.TabIndex = 69;
-            btnCheckout.Text = "COMPLETE";
-            btnCheckout.UseVisualStyleBackColor = false;
+            btnComplete.BackColor = Color.FromArgb(255, 212, 181);
+            btnComplete.FlatStyle = FlatStyle.Flat;
+            btnComplete.Font = new Font("Century Gothic", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnComplete.ForeColor = Color.FromArgb(167, 103, 84);
+            btnComplete.Location = new Point(32, 269);
+            btnComplete.Margin = new Padding(4, 3, 4, 3);
+            btnComplete.Name = "btnComplete";
+            btnComplete.Size = new Size(81, 23);
+            btnComplete.TabIndex = 69;
+            btnComplete.Text = "COMPLETE";
+            btnComplete.UseVisualStyleBackColor = false;
+            btnComplete.Click += btnComplete_Click;
             // 
-            // button1
+            // btnCancel
             // 
-            button1.BackColor = Color.FromArgb(167, 103, 84);
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Century Gothic", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.FromArgb(243, 229, 219);
-            button1.Location = new Point(132, 269);
-            button1.Margin = new Padding(4, 3, 4, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(81, 23);
-            button1.TabIndex = 70;
-            button1.Text = "CANCEL";
-            button1.UseVisualStyleBackColor = false;
+            btnCancel.BackColor = Color.FromArgb(167, 103, 84);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.Font = new Font("Century Gothic", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnCancel.ForeColor = Color.FromArgb(243, 229, 219);
+            btnCancel.Location = new Point(132, 269);
+            btnCancel.Margin = new Padding(4, 3, 4, 3);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(81, 23);
+            btnCancel.TabIndex = 70;
+            btnCancel.Text = "CANCEL";
+            btnCancel.UseVisualStyleBackColor = false;
+            btnCancel.Click += btnCancel_Click;
             // 
             // lblTotal
             // 
@@ -192,8 +193,8 @@
             BackColor = Color.FromArgb(243, 229, 219);
             Controls.Add(panel1);
             Controls.Add(lblTotal);
-            Controls.Add(button1);
-            Controls.Add(btnCheckout);
+            Controls.Add(btnCancel);
+            Controls.Add(btnComplete);
             Controls.Add(label8);
             Controls.Add(label6);
             Controls.Add(label7);
@@ -218,8 +219,8 @@
         private Label label7;
         private Label label6;
         private Label label8;
-        private Button btnCheckout;
-        private Button button1;
+        private Button btnComplete;
+        private Button btnCancel;
         private Label lblTotal;
         private Label lblOrderedItem;
         private Panel panel1;

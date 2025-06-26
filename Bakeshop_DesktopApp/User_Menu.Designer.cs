@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(User_Menu));
             btnLoad = new Button();
             btnCookie = new Button();
             flowLayoutPanelUser = new FlowLayoutPanel();
@@ -50,6 +51,7 @@
             panel2 = new Panel();
             label2 = new Label();
             label1 = new Label();
+            btnLogout = new Button();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -334,6 +336,21 @@
             label1.TabIndex = 46;
             label1.Text = "CATEGORIES";
             // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.Transparent;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Century Gothic", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnLogout.ForeColor = Color.FromArgb(167, 103, 84);
+            btnLogout.Location = new Point(2, -2);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(60, 53);
+            btnLogout.TabIndex = 63;
+            btnLogout.Text = "🏠";
+            btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click_1;
+            // 
             // User_Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -341,6 +358,7 @@
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1060, 494);
+            Controls.Add(btnLogout);
             Controls.Add(panel1);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -358,6 +376,7 @@
             Controls.Add(label1);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "User_Menu";
             StartPosition = FormStartPosition.CenterScreen;
@@ -393,5 +412,6 @@
         private Button btnCheckout;
         private Label lblTotalAmount;
         private Label label1;
+        private Button btnLogout;
     }
 }

@@ -129,6 +129,28 @@ namespace Bakeshop_DataLogic
         public List<OrderDetail> GetOrderDetails(int orderId) {
 
             return bakeshopDataService.GetOrderDetails(orderId);
+
+        }
+
+        public CustomerAccount GetCustomerById(int userId) {
+
+            return bakeshopDataService.GetCustomerById(userId);
+        }
+
+        public bool MarkOrderAsComplete(int orderId) {
+
+            return bakeshopDataService.MarkOrderAsComplete(orderId);
+        }
+
+        public bool MarkOrderAsCancelled(int orderId) {
+            return bakeshopDataService.MarkOrderAsCancelled(orderId);
+        
+        }
+
+        public List<DbOrder> GetAllCompletedOrders()
+        {
+
+            return bakeshopDataService.GetAllCompletedOrders();
         }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Add_Product));
             lblUsername = new Label();
             productImageBox = new PictureBox();
             label1 = new Label();
@@ -333,6 +334,7 @@
             Controls.Add(txtName);
             Controls.Add(productImageBox);
             Controls.Add(lblUsername);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Add_Product";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Product";

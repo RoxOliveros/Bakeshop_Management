@@ -55,11 +55,15 @@ namespace Bakeshop_Common
         private static int nextOrderId = 1;
 
         public int OrderId { get; private set; }
-        public int  userId { get; set; }
+        public int  UserID { get; set; }
         public List<OrderItem> Items { get; set; }
         public decimal TotalAmount => Items.Sum(item => item.Total);
         public string CustomerName { get; set; }  
+
+
         public System.DateTime Timestamp { get; set; }  
+
+
 
         public Order(List<OrderItem> items, string customerName)
         {

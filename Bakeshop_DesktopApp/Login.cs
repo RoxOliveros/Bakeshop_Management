@@ -30,8 +30,7 @@ namespace Bakeshop_DesktopApp
             else if (process.ValidateCustomer(username, password))
             {
                 CustomerAccount customer = process.GetCustomer(username);
-                MessageBox.Show($"UserID: {customer.UserID}");
-
+               
                 MessageBox.Show($"Welcome, {customer.Name}!", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 User_Menu user = new User_Menu (process, customer);  
                 user.Show();

@@ -122,6 +122,7 @@ namespace Bakeshop_DesktopApp
 
         }
 
+       
         protected virtual void DisplayProduct(Product product)
         {
             // to be overridden in Admin_Menu and User_Menu
