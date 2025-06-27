@@ -164,7 +164,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.Login;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(800, 480);
+            ClientSize = new Size(800, 450);
             Controls.Add(btnHidePass);
             Controls.Add(btnUnhidePass);
             Controls.Add(button1);

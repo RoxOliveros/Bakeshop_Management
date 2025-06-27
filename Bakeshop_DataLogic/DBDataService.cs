@@ -379,7 +379,7 @@ namespace Bakeshop_DataLogic
                         Instructions = reader["instructions"].ToString(),
                         Status = reader["status"].ToString(),
 
-                        // from Menu table
+                        
                         ProductName = reader["productName"].ToString(),
                         ProductImage = reader["productImage"] as byte[]
                     });

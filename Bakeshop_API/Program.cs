@@ -1,4 +1,5 @@
 using BakeshopManagement.Business;
+
 namespace Bakeshop_API
 {
     public class Program
@@ -15,6 +16,7 @@ namespace Bakeshop_API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<BakeshopProcess>();
+           
 
             // Enable CORS for frontend connections 
             builder.Services.AddCors(options =>

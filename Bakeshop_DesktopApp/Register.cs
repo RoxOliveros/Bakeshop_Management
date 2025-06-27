@@ -73,7 +73,7 @@ namespace Bakeshop_DesktopApp
             }
 
             MessageBox.Show("Registration successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
+            
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

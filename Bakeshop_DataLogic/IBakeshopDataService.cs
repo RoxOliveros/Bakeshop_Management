@@ -16,13 +16,6 @@ namespace Bakeshop_DataLogic
         bool DeleteProduct(string name);
         List<Product> SearchProduct(string searchTerm);
 
-
-        //List<(string Name, decimal Price)> GetMenu();
-
-        //void SaveOrder (Order order);
-        //List<Order> GetOrders();
-
-
         bool ValidateCustomer(string username, string password);
         CustomerAccount GetCustomer(string username);
         bool RegisterCustomerAccount(CustomerAccount account);

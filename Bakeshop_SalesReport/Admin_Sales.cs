@@ -1,7 +1,8 @@
-﻿using LiveChartsCore;
+﻿using Bakeshop_Common;
+using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.WinForms;
-using Bakeshop_Common;
+using System.Linq;
 
 
 
@@ -28,7 +29,9 @@ namespace Bakeshop_SalesReport
         private void LoadChart(CartesianChart chart, List<DbOrder> orders, string mode)
         {
             var filtered = orders
-                .Where(o => o.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase));
+            .Where(o => o.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase))
+            .ToList(); 
+
 
             var groupedSales = new List<(string Label, decimal Total)>();
 
@@ -74,59 +77,48 @@ namespace Bakeshop_SalesReport
             var labels = groupedSales.Select(g => g.Label).ToArray();
             var values = groupedSales.Select(g => (double)g.Total).ToArray();
 
-            // Chart
+           
+            lblChartTitle.Text = $"Sales Report by {mode}";
+
             chart.Series = new ISeries[]
             {
-        new ColumnSeries<double>
-        {
-            Values = values,
-            Name = "Sales (₱)"
-        }
+                new ColumnSeries<double>
+                {
+                    Values = values,
+                    Name = "Sales (₱)"
+                }
             };
 
             chart.XAxes = new Axis[]
             {
-        new Axis
-        {
-            Labels = labels,
-            LabelsRotation = 15,
-            Name = mode
-        }
+                new Axis
+                {
+                    Labels = labels,
+                    LabelsRotation = 15,
+                    Name = string.Empty, 
+                    IsVisible = true
+                }
             };
 
             chart.YAxes = new Axis[]
             {
-        new Axis
-        {
-            Name = "Total Sales",
-            Labeler = value => "₱" + value.ToString("N0")
-        }
+                new Axis
+                {
+                    Name = string.Empty,
+                    Labeler = value => "₱" + value.ToString("N0"),
+                    IsVisible = true
+                }
             };
 
-            // DataGridView Table
-            dgvSalesSummary.Columns.Clear();
-            dgvSalesSummary.Rows.Clear();
+            decimal totalSales = filtered.Sum(x => x.TotalAmount);
+            int totalOrders = filtered.Count;
+            int totalBuyers = filtered.Select(x => x.UserID).Distinct().Count(); 
 
-            dgvSalesSummary.Columns.Add("Time", mode);
-            dgvSalesSummary.Columns.Add("Total", "Total Sales (₱)");
-
-            foreach (var item in groupedSales)
-            {
-                dgvSalesSummary.Rows.Add(item.Label, item.Total.ToString("N2"));
-            }
-
-            // Optional: Add grand total row
-            if (groupedSales.Any())
-            {
-                decimal grandTotal = groupedSales.Sum(x => x.Total);
-                dgvSalesSummary.Rows.Add("TOTAL", grandTotal.ToString("N2"));
-            }
-
-            // Optional: Style
-            dgvSalesSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvSalesSummary.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dgvSalesSummary.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            lblSales.Text = "₱" + totalSales.ToString("N2");
+            lblOrders.Text = totalOrders.ToString();
+            lblBuyers.Text = totalBuyers.ToString();
         }
+
 
 
 
@@ -155,6 +147,11 @@ namespace Bakeshop_SalesReport
         private void btnOrder_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void chartSales_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
