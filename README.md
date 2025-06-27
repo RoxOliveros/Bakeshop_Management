@@ -1,5 +1,5 @@
 # 🍰 Bakeshop Management System ✨  
-Welcome to the **Bakeshop Management System**, a sweet and smart Windows Forms Application built with 💖 using **C#** and **SQL Server**. Designed to give both customers and admins a delightful experience—from browsing cakes to managing sales with beautiful charts!
+Welcome to the **Bakeshop Management System**, a sweet and smart Windows Forms Application built with 💖 (🩸😢🔪) using **C#** and **SQL Server**. Designed to give both customers and admins a delightful experience—from browsing cakes to managing sales.
 
 ---
 
@@ -135,20 +135,4 @@ View past and ongoing orders, beautifully sorted by status:
 - 🧁 **Main GUI Project** – Forms for Admin & Customer
 - 📊 **Admin_Sales Project** – Standalone project to isolate chart dependencies
 
----
-
-## 🧡 Credits and Notes
-
-Created with passion for programming and pastries. 🎂  
-If you're planning to explore or expand this project, you're more than welcome!  
-
-Pull requests, forks, and stars are sweetly appreciated. 🌟✨
-
----
-
-## 💌 Contact
-
-For any suggestions or feedback:
-📧 Email: yourname@gmail.com  
-📦 GitHub: [github.com/yourusername](https://github.com/yourusername)
 
