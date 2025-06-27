@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Bakeshop_API\**" />
     <Compile Remove="Bakeshop_BusinessDataLogic\**" />
     <Compile Remove="Bakeshop_Common\**" />
     <Compile Remove="Bakeshop_DataLogic\**" />
@@ -16,6 +17,7 @@
     <Compile Remove="Bakeshop_UICommon\**" />
     <Compile Remove="GUI_Images\**" />
     <Compile Remove="WinFormsApp1\**" />
+    <EmbeddedResource Remove="Bakeshop_API\**" />
     <EmbeddedResource Remove="Bakeshop_BusinessDataLogic\**" />
     <EmbeddedResource Remove="Bakeshop_Common\**" />
     <EmbeddedResource Remove="Bakeshop_DataLogic\**" />
@@ -24,6 +26,7 @@
     <EmbeddedResource Remove="Bakeshop_UICommon\**" />
     <EmbeddedResource Remove="GUI_Images\**" />
     <EmbeddedResource Remove="WinFormsApp1\**" />
+    <None Remove="Bakeshop_API\**" />
     <None Remove="Bakeshop_BusinessDataLogic\**" />
     <None Remove="Bakeshop_Common\**" />
     <None Remove="Bakeshop_DataLogic\**" />
