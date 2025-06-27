@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Bakeshop_Common;
 using BakeshopManagement.Business;
 using BakeshopManagement.UI;
-using Bakeshop_Common;
+using System;
 
 namespace BakeshopManagement
 {
@@ -16,39 +16,45 @@ namespace BakeshopManagement
 
         public void DisplayLogin()
         {
-           
-            string usernameInput, pinInput;
-
-            Console.WriteLine("== LOGIN ==");
-
-            do
+            while (true)
             {
+                Console.Clear();
+                Console.WriteLine("== XANNE'S BAKESHOP LOGIN ==");
                 Console.Write("Enter Username: ");
-                usernameInput = Console.ReadLine();
+                string usernameInput = Console.ReadLine();
 
                 Console.Write("Enter Password: ");
-                pinInput = Console.ReadLine();
+                string pinInput = Console.ReadLine();
 
+                // ADMIN LOGIN
                 if (usernameInput == sharedProcess.adminUsername && pinInput == sharedProcess.adminPin)
                 {
-                    Console.WriteLine("\n== WELCOME TO XANNE'S BAKESHOP (ADMIN) ==");
+                    Console.Clear();
+                    Console.WriteLine("\n== WELCOME ADMIN TO XANNE'S BAKESHOP ==");
                     Program.Admin(sharedProcess);
-                    break; 
+                    break;
                 }
 
+                // CUSTOMER LOGIN
                 else if (sharedProcess.ValidateCustomer(usernameInput, pinInput))
                 {
-                    var customer = sharedProcess.GetCustomer(usernameInput);  
+                    var customer = sharedProcess.GetCustomer(usernameInput);
+                    Console.Clear();
                     Console.WriteLine($"\n== Welcome, {customer.Name}! ==");
-                    var ui = new Order_UI();
-                    ui.Customer(customer, sharedProcess);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid username or password. Please try again.");
+
+                    var orderUI = new Order_UI();
+                    orderUI.Customer(customer, sharedProcess);
+
+                    break;
                 }
 
-            } while (true);
+                // INVALID LOGIN
+                else
+                {
+                    Console.WriteLine("\n❌ Invalid username or password. Press Enter to try again.");
+                    Console.ReadLine();
+                }
+            }
         }
     }
 }

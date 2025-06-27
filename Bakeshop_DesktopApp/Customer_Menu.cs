@@ -13,14 +13,14 @@ using System.Windows.Forms;
 
 namespace Bakeshop_DesktopApp
 {
-    public partial class User_Menu : SharedFunction
+    public partial class Customer_Menu : SharedFunction
     {
         private CustomerAccount customer;
         private BakeshopProcess process;
 
 
 
-        public User_Menu(BakeshopProcess process, CustomerAccount customer)
+        public Customer_Menu(BakeshopProcess process, CustomerAccount customer)
         {
             InitializeComponent();
 
@@ -32,6 +32,7 @@ namespace Bakeshop_DesktopApp
 
             LoadProducts();
             LoadCheckoutArea();
+
         }
 
 
@@ -127,17 +128,17 @@ namespace Bakeshop_DesktopApp
             }
 
             lblTotalAmount.Text = $"₱{grandTotal:0.00}"; //  Update label
-
+            ReloadProducts();
         }
 
         private void OnCartDeleted(Cart cart)
         {
             bool success = process.DeleteCartItem(cart.CartID); // Pass only cartID
 
-          
+
             if (success)
             {
-                LoadCheckoutArea(); // Refresh the display
+                LoadCheckoutArea();
             }
             else
             {
@@ -175,6 +176,30 @@ namespace Bakeshop_DesktopApp
         }
 
         private void btnLogout_Click_1(object sender, EventArgs e)
+        {
+            Logout();
+        }
+
+
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void flowLayoutCheckout_Paint(object sender, PaintEventArgs e)
+        {
+            ReloadProducts();
+        }
+
+        private void btnHistory_Click(object sender, EventArgs e)
+        {
+            Customer_History historyForm = new Customer_History(process, customer);
+            historyForm.Show();
+            this.Hide();
+        }
+
+        private void btnLogout_Click_2(object sender, EventArgs e)
         {
             Logout();
         }

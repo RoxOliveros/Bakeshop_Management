@@ -1,7 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using Bakeshop_Common;
 using BakeshopManagement.Business;
-using Bakeshop_Common;
+using System;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Bakeshop_DesktopApp
   
@@ -22,7 +23,7 @@ namespace Bakeshop_DesktopApp
 
             if (username == process.adminUsername && password == process.adminPin)
             {
-                MessageBox.Show("Welcome Admin!", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Welcome Admin! ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Admin_Menu admin = new Admin_Menu();
                 admin.Show();
                 this.Hide();
@@ -30,9 +31,9 @@ namespace Bakeshop_DesktopApp
             else if (process.ValidateCustomer(username, password))
             {
                 CustomerAccount customer = process.GetCustomer(username);
-               
-                MessageBox.Show($"Welcome, {customer.Name}!", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                User_Menu user = new User_Menu (process, customer);  
+
+                MessageBox.Show($"୨୧ *:・ﾟ🍓 Hello {customer.Name}! ・ﾟ:* ୨୧\nEnjoy your time in the bakeshop! 🎀", "Login Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Customer_Menu user = new Customer_Menu(process, customer);
                 user.Show();
                 this.Hide();
             }
@@ -57,6 +58,22 @@ namespace Bakeshop_DesktopApp
         private void txtUsername_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+
+
+        private void btnHidePass_Click_1(object sender, EventArgs e)
+        {
+            txtPass.PasswordChar = '*'; // Hide the password
+            btnUnhidePass.Visible = true;
+            btnHidePass.Visible = false;
+        }
+
+        private void btnUnhidePass_Click(object sender, EventArgs e)
+        {
+            txtPass.PasswordChar = '\0'; // Show the password
+            btnUnhidePass.Visible = false;
+            btnHidePass.Visible = true;
         }
     }
 

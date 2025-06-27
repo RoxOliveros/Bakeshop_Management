@@ -13,6 +13,7 @@
     <Compile Remove="Bakeshop_DataLogic\**" />
     <Compile Remove="Bakeshop_DesktopApp\**" />
     <Compile Remove="Bakeshop_SalesReport\**" />
+    <Compile Remove="Bakeshop_UICommon\**" />
     <Compile Remove="GUI_Images\**" />
     <Compile Remove="WinFormsApp1\**" />
     <EmbeddedResource Remove="Bakeshop_BusinessDataLogic\**" />
@@ -20,6 +21,7 @@
     <EmbeddedResource Remove="Bakeshop_DataLogic\**" />
     <EmbeddedResource Remove="Bakeshop_DesktopApp\**" />
     <EmbeddedResource Remove="Bakeshop_SalesReport\**" />
+    <EmbeddedResource Remove="Bakeshop_UICommon\**" />
     <EmbeddedResource Remove="GUI_Images\**" />
     <EmbeddedResource Remove="WinFormsApp1\**" />
     <None Remove="Bakeshop_BusinessDataLogic\**" />
@@ -27,8 +29,14 @@
     <None Remove="Bakeshop_DataLogic\**" />
     <None Remove="Bakeshop_DesktopApp\**" />
     <None Remove="Bakeshop_SalesReport\**" />
+    <None Remove="Bakeshop_UICommon\**" />
     <None Remove="GUI_Images\**" />
     <None Remove="WinFormsApp1\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Accounts.txt" />
+    <None Remove="Menu.txt" />
   </ItemGroup>
 
   <ItemGroup>

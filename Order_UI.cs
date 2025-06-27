@@ -1,32 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using Bakeshop_Common;
 using BakeshopManagement.Business;
-
 
 namespace BakeshopManagement.UI
 {
     public class Order_UI
     {
-        public void Customer (CustomerAccount customer, BakeshopProcess process)
+        public void Customer(CustomerAccount customer, BakeshopProcess process)
         {
             int customerAction;
 
             do
             {
-                string[] actions = new string[]
-                {
-                    "[1] View Menu",
-                    "[2] Place Order",
-                    "[3] Logout"
-                };
-
-                Console.WriteLine("\nChoose an Action");
-
-                foreach (var action in actions)
-                {
-                    Console.WriteLine(action);
-                }
-
+                Console.WriteLine($"\n== Welcome, {customer.Name}! ==");
+                Console.WriteLine("Choose an action:");
+                Console.WriteLine("[1] View Menu");
+                Console.WriteLine("[2] Place Order");
+                Console.WriteLine("[3] Logout");
                 Console.Write("Enter Action: ");
 
                 if (int.TryParse(Console.ReadLine(), out customerAction))
@@ -34,84 +25,135 @@ namespace BakeshopManagement.UI
                     switch (customerAction)
                     {
                         case 1: // View Menu
-                            Program.Menu(process);
+                            var products = process.GetAllProducts();
+                            Console.WriteLine("\n--- MENU ---");
+                            foreach (var p in products)
+                            {
+                                Console.WriteLine($"- {p.ProductName} [₱{p.Price1:0.00}]");
+                            }
                             break;
 
-                        case 2: // Place Order
 
-                            var orders = new List<(string, int)>();
+                        case 2: // Place Order
+                            var cartItems = new List<Cart>();
 
                             do
                             {
                                 Console.Write("\nEnter product name: ");
-                                string product = Console.ReadLine();
+                                string productName = Console.ReadLine()?.Trim();
 
-                                Console.Write("Enter quantity: ");
+                                if (string.IsNullOrEmpty(productName))
+                                {
+                                    Console.WriteLine(" Product name cannot be empty.");
+                                    continue;
+                                }
+
+                                var matched = process.SearchProducts(productName);
+
+                                if (matched == null || matched.Count == 0)
+                                {
+                                    Console.WriteLine(" Product not found.");
+                                    continue;
+                                }
+
+                                var selected = matched[0]; // pick first match
+
+                                Console.Write($"Enter quantity for {selected.ProductName}: ");
                                 if (int.TryParse(Console.ReadLine(), out int qty) && qty > 0)
                                 {
-                                    orders.Add((product, qty));
+                                    Console.Write($"Enter option (default: {selected.Option1 ?? "Regular"}): ");
+                                    string optionInput = Console.ReadLine()?.Trim();
+                                    string option = string.IsNullOrWhiteSpace(optionInput) ? (selected.Option1 ?? "Regular") : optionInput;
+
+                                    cartItems.Add(new Cart
+                                    {
+                                        ProductID = selected.ProductId,
+                                        ProductName = selected.ProductName,
+                                        Quantity = qty,
+                                        UnitPrice = selected.Price1,
+                                        TotalPrice = qty * selected.Price1,
+                                        SelectedOption = option,
+                                        Instructions = ""       
+                                    });
+
+                                    Console.WriteLine($" Added: {qty} x {selected.ProductName} (Option: {option})");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Invalid quantity.");
+                                    Console.WriteLine(" Invalid quantity.");
                                 }
 
-                                Console.Write("\nDo you want to add another order? (yes/no): ");
+                                Console.Write("Add another product? (yes/no): ");
                             } while (Console.ReadLine().Trim().ToLower() == "yes");
 
-                            // Process all orders
-                            var receipt = process.ProcessMultipleOrders(orders);
-
-                            if (receipt.Count > 0)
+                            if (cartItems.Count > 0)
                             {
-                                var order = new Order(receipt, customer.Name);  
-                                process.SaveOrder(order);
-
-                                Console.WriteLine("\n\t XANNE'S BAKESHOP");
-                                Console.WriteLine("Address: Somewhere in Grandline");
-                                Console.WriteLine("Tel: 123-456-789");
-                                Console.WriteLine("------------------------------------------");
-
-                                Console.WriteLine($"Date: {DateTime.Now.ToString("MMMM dd, yyyy")} \t Time: {DateTime.Now.ToString("hh:mm tt")}");
-
-                                Console.WriteLine("------------------------------------------\n");
-
-
-
-                                decimal grandTotal = 0;
-                                foreach (var item in receipt)
+                                try
                                 {
-                                    Console.WriteLine($"{item.Quantity}x {item.ProductName} \t @ P{item.UnitPrice}");
-                                    grandTotal += item.Total;
+                                    Console.WriteLine("\n Attempting to save order...");
+                                    Console.WriteLine($"CustomerID: {customer.UserID}");
+
+                                    foreach (var item in cartItems)
+                                    {
+                                        Console.WriteLine($"- {item.ProductName} (ID: {item.ProductID}), Qty: {item.Quantity}, Option: {item.SelectedOption}, Total: ₱{item.TotalPrice:0.00}");
+                                    }
+
+                                    bool success = process.SaveOrder(customer.UserID, cartItems, out int newOrderId);
+                                    Console.WriteLine($" SaveOrder result: {success}, New Order ID: {newOrderId}");
+
+                                    if (success)
+                                    {
+                                        Console.WriteLine("\n Order Saved Successfully!");
+                                        Console.WriteLine("\n--- RECEIPT ---");
+                                        Console.WriteLine("XANNE'S BAKESHOP");
+                                        Console.WriteLine($"Date: {DateTime.Now:MMMM dd, yyyy hh:mm tt}");
+                                        Console.WriteLine("------------------------------");
+
+                                        decimal total = 0;
+                                        foreach (var item in cartItems)
+                                        {
+                                            Console.WriteLine($"{item.Quantity}x {item.ProductName} ({item.SelectedOption}) @ ₱{item.UnitPrice:0.00}");
+                                            total += item.TotalPrice;
+                                        }
+
+                                        Console.WriteLine("------------------------------");
+                                        Console.WriteLine($"TOTAL: ₱{total:0.00}");
+                                        Console.WriteLine("Thank you for your order!");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("❌ Failed to save order. The data may be invalid or incomplete.");
+                                    }
                                 }
-                                Console.WriteLine("\n------------------------------------------\n");
-                                Console.WriteLine($"TOTAL: P{grandTotal}");
-                                Console.WriteLine("\nThank you for ordering!");
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"❌ Exception occurred while saving order: {ex.Message}");
+                                }
                             }
                             else
                             {
-                                Console.WriteLine("No valid products found in your order.");
+                                Console.WriteLine("❌ No items in cart.");
                             }
                             break;
 
+
+
                         case 3: // Logout
-                            Console.WriteLine("Logging out... Returning to login.\n");
-                            Program.RestartLogin(process);
-                            // Go back to the login screen
-                            break;
+                            Console.WriteLine(" Logging out...");
+                            Program.RestartLogin(process); 
+                            return;
 
                         default:
-                            Console.WriteLine("Invalid choice. Please select a number between 1-3.");
+                            Console.WriteLine("❌ Invalid action.");
                             break;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input. Please enter a number.");
+                    Console.WriteLine("❌ Please enter a number.");
                 }
 
-            } while (customerAction != 3);
+            } while (true);
         }
-       
     }
 }

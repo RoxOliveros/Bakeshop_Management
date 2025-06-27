@@ -35,7 +35,6 @@
             flowLayoutOrders = new FlowLayoutPanel();
             label1 = new Label();
             cmbSortOrders = new ComboBox();
-            btnLogout = new Button();
             SuspendLayout();
             // 
             // btnSales
@@ -119,21 +118,6 @@
             cmbSortOrders.Text = "Sort  by";
             cmbSortOrders.SelectedIndexChanged += cmbSortOrders_SelectedIndexChanged;
             // 
-            // btnLogout
-            // 
-            btnLogout.BackColor = Color.Transparent;
-            btnLogout.FlatAppearance.BorderSize = 0;
-            btnLogout.FlatStyle = FlatStyle.Flat;
-            btnLogout.Font = new Font("Century Gothic", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnLogout.ForeColor = Color.FromArgb(167, 103, 84);
-            btnLogout.Location = new Point(0, 12);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(60, 41);
-            btnLogout.TabIndex = 64;
-            btnLogout.Text = "🏠";
-            btnLogout.UseVisualStyleBackColor = false;
-            btnLogout.Click += btnLogout_Click;
-            // 
             // Admin_Orders
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -141,7 +125,6 @@
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(899, 532);
-            Controls.Add(btnLogout);
             Controls.Add(cmbSortOrders);
             Controls.Add(label1);
             Controls.Add(flowLayoutOrders);
@@ -167,6 +150,5 @@
         private FlowLayoutPanel flowLayoutOrders;
         private Label label1;
         private ComboBox cmbSortOrders;
-        private Button btnLogout;
     }
 }

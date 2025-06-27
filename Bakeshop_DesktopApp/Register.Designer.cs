@@ -199,11 +199,13 @@
             Controls.Add(txtUsername);
             Controls.Add(lblUsername);
             Controls.Add(txtName);
+            ForeColor = SystemColors.ControlLightLight;
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Register";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Register";
+            Text = "Cozy Crust";
             ResumeLayout(false);
             PerformLayout();
         }

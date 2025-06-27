@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.0-preview1.25120.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Bakeshop_BusinessLogic">
+      <HintPath>..\Bakeshop_BusinessDataLogic\bin\Debug\net8.0\Bakeshop_BusinessLogic.dll</HintPath>
+    </Reference>
+    <Reference Include="Bakeshop_Common">
+      <HintPath>..\Bakeshop_DataLogic\bin\Debug\net8.0\Bakeshop_Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -87,11 +87,28 @@ namespace Bakeshop_DesktopApp
             {
                 if (rb.Checked)
                 {
+                    // Uncheck all other radio buttons
+                    foreach (Control ctrl in panelVariation.Controls)
+                    {
+                        if (ctrl is Panel variationPanel)
+                        {
+                            foreach (Control subCtrl in variationPanel.Controls)
+                            {
+                                if (subCtrl is RadioButton otherRb && otherRb != rb)
+                                {
+                                    otherRb.Checked = false;
+                                }
+                            }
+                        }
+                    }
+
+                    // Update the total price
                     int quantity = int.Parse(lblQuantity.Text);
                     decimal total = price * quantity;
                     lblPrice.Text = $"₱{total:0.00}";
                 }
             };
+
 
             Label lblOptionPrice = new Label
             {
@@ -137,6 +154,10 @@ namespace Bakeshop_DesktopApp
 
 
 
+
+
+
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             int quantity = int.Parse(lblQuantity.Text);
@@ -174,6 +195,7 @@ namespace Bakeshop_DesktopApp
                             dynamic tag = rb.Tag;
                             selectedOption = tag.Option;
                             unitPrice = tag.Price;
+
                             break;
                         }
                     }
@@ -204,7 +226,7 @@ namespace Bakeshop_DesktopApp
             };
 
 
-          
+
 
             bool success = process.AddToCartProduct(cartItem);
 
@@ -220,6 +242,11 @@ namespace Bakeshop_DesktopApp
         }
 
         private void AddToCart_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panelVariation_Paint(object sender, PaintEventArgs e)
         {
 
         }

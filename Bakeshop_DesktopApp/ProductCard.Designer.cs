@@ -31,7 +31,6 @@
             pictureBox = new PictureBox();
             lblName = new Label();
             lblPrice = new Label();
-            details = new Label();
             btnDelete = new Button();
             btnUpdate = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
@@ -42,7 +41,7 @@
             pictureBox.Location = new Point(12, 14);
             pictureBox.Name = "pictureBox";
             pictureBox.Size = new Size(127, 107);
-            pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox.TabIndex = 0;
             pictureBox.TabStop = false;
             // 
@@ -67,17 +66,6 @@
             lblPrice.Size = new Size(35, 15);
             lblPrice.TabIndex = 2;
             lblPrice.Text = "Price";
-            // 
-            // details
-            // 
-            details.AutoSize = true;
-            details.Font = new Font("Microsoft Sans Serif", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            details.ForeColor = Color.FromArgb(247, 183, 147);
-            details.Location = new Point(84, 143);
-            details.Name = "details";
-            details.Size = new Size(45, 12);
-            details.TabIndex = 3;
-            details.Text = "DETAIL +";
             // 
             // btnDelete
             // 
@@ -112,7 +100,6 @@
             BackColor = Color.FromArgb(255, 235, 219);
             Controls.Add(btnUpdate);
             Controls.Add(btnDelete);
-            Controls.Add(details);
             Controls.Add(lblPrice);
             Controls.Add(lblName);
             Controls.Add(pictureBox);
@@ -129,7 +116,6 @@
         private PictureBox pictureBox;
         private Label lblName;
         private Label lblPrice;
-        private Label details;
         private Button btnDelete;
         private Button btnUpdate;
     }

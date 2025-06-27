@@ -59,7 +59,7 @@ namespace Bakeshop_DesktopApp
                 return;
             }
 
-            var results = process?.SearchProduct(searchTerm);
+            var results = process?.SearchProducts(searchTerm);
 
             if (flowLayoutPanelProducts == null)
             {
@@ -69,15 +69,19 @@ namespace Bakeshop_DesktopApp
 
             flowLayoutPanelProducts.Controls.Clear();
 
-            if (results != null && results.Count > 0 && results[0] != null)
+            if (results != null && results.Count > 0)
             {
-                DisplayProduct(results[0]); // Only show one result
+                foreach (var product in results)
+                {
+                    DisplayProduct(product);
+                }
             }
             else
             {
                 MessageBox.Show("No product found.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
 
 
         protected void LoadCategory(string category)
@@ -113,14 +117,15 @@ namespace Bakeshop_DesktopApp
 
             if (result == DialogResult.Yes)
             {
-                // Assuming this is inside your Main or Dashboard form
-                this.Hide(); // Or this.Close(); if you're OK closing it
+               
+                this.Hide(); 
 
-                Login loginForm = new Login(process); // Replace with your actual login form class name
+                Login loginForm = new Login(process);
                 loginForm.Show();
             }
 
         }
+
 
        
         protected virtual void DisplayProduct(Product product)

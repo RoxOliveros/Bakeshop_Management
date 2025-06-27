@@ -111,32 +111,37 @@ namespace Bakeshop_DataLogic
         public bool AddProduct(Product product)
         {
             string query = @"INSERT INTO Menu (productName, category, option1, price1, option2, price2, option3, price3, option4, price4, description, productImage)
-             VALUES  (@ProductName, @Category, @Option1, @Price1, @Option2, @Price2, @Option3, @Price3, @Option4, @Price4, @Description, @ProductImage)";
+                     VALUES (@ProductName, @Category, @Option1, @Price1, @Option2, @Price2, @Option3, @Price3, @Option4, @Price4, @Description, @ProductImage)";
 
-            using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                cmd.Parameters.AddWithValue("@ProductName", product.ProductName);
-                cmd.Parameters.AddWithValue("@Category", product.Category);
-                cmd.Parameters.AddWithValue("@Option1", product.Option1);
-                cmd.Parameters.AddWithValue("@Price1", product.Price1);
+                conn.Open();
 
-                cmd.Parameters.AddWithValue("@Option2", string.IsNullOrEmpty(product.Option2) ? (object)DBNull.Value : product.Option2);
-                cmd.Parameters.AddWithValue("@Price2", product.Price2.HasValue ? (object)product.Price2.Value : DBNull.Value);
-                cmd.Parameters.AddWithValue("@Option3", string.IsNullOrEmpty(product.Option3) ? (object)DBNull.Value : product.Option3);
-                cmd.Parameters.AddWithValue("@Price3", product.Price3.HasValue ? (object)product.Price3.Value : DBNull.Value);
-                cmd.Parameters.AddWithValue("@Option4", string.IsNullOrEmpty(product.Option4) ? (object)DBNull.Value : product.Option4);
-                cmd.Parameters.AddWithValue("@Price4", product.Price4.HasValue ? (object)product.Price4.Value : DBNull.Value);
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ProductName", product.ProductName);
+                    cmd.Parameters.AddWithValue("@Category", product.Category);
+                    cmd.Parameters.AddWithValue("@Option1", product.Option1);
+                    cmd.Parameters.AddWithValue("@Price1", product.Price1);
 
-                cmd.Parameters.AddWithValue("@Description", string.IsNullOrEmpty(product.Description) ? (object)DBNull.Value : product.Description);
-                cmd.Parameters.AddWithValue("@ProductImage", (object)product.ProductImage ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Option2", string.IsNullOrEmpty(product.Option2) ? (object)DBNull.Value : product.Option2);
+                    cmd.Parameters.AddWithValue("@Price2", product.Price2.HasValue ? (object)product.Price2.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Option3", string.IsNullOrEmpty(product.Option3) ? (object)DBNull.Value : product.Option3);
+                    cmd.Parameters.AddWithValue("@Price3", product.Price3.HasValue ? (object)product.Price3.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Option4", string.IsNullOrEmpty(product.Option4) ? (object)DBNull.Value : product.Option4);
+                    cmd.Parameters.AddWithValue("@Price4", product.Price4.HasValue ? (object)product.Price4.Value : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Description", string.IsNullOrEmpty(product.Description) ? (object)DBNull.Value : product.Description);
+                    cmd.Parameters.Add(new SqlParameter("@ProductImage", System.Data.SqlDbType.VarBinary, -1)
+                    {
+                        Value = product.ProductImage ?? (object)DBNull.Value
+                    });
 
-                sqlConnection.Open();
-                int result = cmd.ExecuteNonQuery();
-                sqlConnection.Close();
-
-                return result > 0;
+                    return cmd.ExecuteNonQuery() > 0;
+                }
             }
         }
+
+
 
 
         public List<Product> GetAllProducts()
@@ -237,15 +242,14 @@ namespace Bakeshop_DataLogic
             }
         }
 
-
         public List<Product> SearchProduct(string searchName)
         {
             var products = new List<Product>();
-            string query = "SELECT * FROM Menu WHERE productName LIKE @SearchTerm";
+            string query = "SELECT * FROM Menu WHERE LOWER(productName) LIKE @SearchTerm";
 
             using (SqlCommand command = new SqlCommand(query, sqlConnection))
             {
-                command.Parameters.AddWithValue("@SearchTerm", $"%{searchName}%");
+                command.Parameters.AddWithValue("@SearchTerm", $"%{searchName.ToLower()}%");
                 sqlConnection.Open();
 
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -635,7 +639,7 @@ namespace Bakeshop_DataLogic
         {
             string query = @"
         UPDATE Orders 
-        SET status = 'Complete' 
+        SET status = 'Completed' 
         WHERE orderID = @OrderID AND status = 'Pending'";
 
             using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
@@ -676,7 +680,7 @@ namespace Bakeshop_DataLogic
                 string query = @"
             SELECT OrderID, UserID, OrderDate, TotalAmount, Status
             FROM Orders
-            WHERE Status = 'Complete'";
+            WHERE Status = 'Completed'";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -712,24 +716,6 @@ namespace Bakeshop_DataLogic
 
 
 
-        public List<(string Name, decimal Price)> GetMenu()
-        {
-            var menuList = new List<(string, decimal)>();
-            for (int i = 0; i < Menu.Count; i++)
-            {
-                menuList.Add((Menu[i], Prices[i]));
-            }
-            return menuList;
-        }
-
-        public void SaveOrder(Order order)
-        {
-            Orders.Add(order);
-        }
-
-        public List<Order> GetOrders()
-        {
-            return Orders;
-        }
+       
     }
 }

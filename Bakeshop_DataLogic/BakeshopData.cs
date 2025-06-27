@@ -17,11 +17,6 @@ namespace Bakeshop_DataLogic
 
 
 
-        public List<(string Name, decimal Price)> GetMenu()
-        {
-            return bakeshopDataService.GetMenu();
-        }
-
         public List<Product> GetAllProducts()
         {
             return bakeshopDataService.GetAllProducts();
@@ -48,15 +43,7 @@ namespace Bakeshop_DataLogic
             return bakeshopDataService.SearchProduct(searchName);
         }
 
-        public void SaveOrder(Order order)
-        {
-            bakeshopDataService.SaveOrder(order);
-        }
-
-        public List<Order> GetOrders()
-        {
-            return bakeshopDataService.GetOrders();
-        }
+       
 
         public bool ValidateCustomer(string username, string password)
         {
@@ -152,5 +139,7 @@ namespace Bakeshop_DataLogic
 
             return bakeshopDataService.GetAllCompletedOrders();
         }
+
+       
     }
 }

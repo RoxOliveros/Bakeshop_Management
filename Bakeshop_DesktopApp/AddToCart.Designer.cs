@@ -252,6 +252,7 @@
             panelVariation.Size = new Size(261, 89);
             panelVariation.TabIndex = 69;
             panelVariation.WrapContents = false;
+            panelVariation.Paint += panelVariation_Paint;
             // 
             // AddToCart
             // 
@@ -276,12 +277,13 @@
             Controls.Add(lblQuantity);
             Controls.Add(btnAdd);
             Controls.Add(btnAddtoCart);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
             Name = "AddToCart";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "AddToCart";
+            Text = "Add To Cart";
             Load += AddToCart_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBoxCart).EndInit();
             ResumeLayout(false);

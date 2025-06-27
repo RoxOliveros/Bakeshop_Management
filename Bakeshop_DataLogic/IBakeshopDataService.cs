@@ -17,10 +17,10 @@ namespace Bakeshop_DataLogic
         List<Product> SearchProduct(string searchTerm);
 
 
-        List<(string Name, decimal Price)> GetMenu();
+        //List<(string Name, decimal Price)> GetMenu();
 
-        void SaveOrder (Order order);
-        List<Order> GetOrders();
+        //void SaveOrder (Order order);
+        //List<Order> GetOrders();
 
 
         bool ValidateCustomer(string username, string password);
@@ -55,6 +55,8 @@ namespace Bakeshop_DataLogic
         bool MarkOrderAsCancelled(int orderId);
 
         List<DbOrder> GetAllCompletedOrders();
+
+      
 
 
     }

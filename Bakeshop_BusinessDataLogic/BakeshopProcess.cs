@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Bakeshop_Common;
 using Bakeshop_DataLogic;
-using Bakeshop_Common;
+using Microsoft.Data.SqlClient;
+using System;
+using System.Collections.Generic;
 
 namespace BakeshopManagement.Business
 {
@@ -10,7 +11,7 @@ namespace BakeshopManagement.Business
         private BakeshopDataService dataService = new BakeshopDataService();
 
         public string adminUsername = "admin";
-        public string adminPin = "123";
+        public string adminPin = "roxy";
 
         public bool ValidateCustomer(string username, string password)
         {
@@ -22,18 +23,56 @@ namespace BakeshopManagement.Business
             return dataService.GetCustomer(username);
         }
 
-        public bool RegisterCustomer(CustomerAccount newAccount)
+        public bool RegisterCustomer(CustomerAccount account, out string errorMessage)
         {
-            return dataService.RegisterCustomerAccount(newAccount);
+            errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(account.Email) ||
+                !account.Email.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
+            {
+                errorMessage = "Email must end with @gmail.com.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(account.Password) || account.Password.Length < 8)
+            {
+                errorMessage = "Password must be at least 8 characters long.";
+                return false;
+            }
+
+            return dataService.RegisterCustomerAccount(account);
         }
 
 
-        public bool AddProduct(Product product)
+
+        public bool AddProduct(Product product, out string errorMessage)
         {
-            return dataService.AddProduct(product);
+            errorMessage = "";
+
+            if (string.IsNullOrWhiteSpace(product.ProductName))
+            {
+                errorMessage = "Product name is required.";
+                return false;
+            }
+
+            try
+            {
+                return dataService.AddProduct(product);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627 || ex.Number == 2601) // Unique constraint violation
+                {
+                    errorMessage = "Product name already exists.";
+                    return false;
+                }
+
+                errorMessage = "An unexpected error occurred: " + ex.Message;
+                return false;
+            }
         }
 
-   
+
         public List<Product> GetAllProducts()
         {
             return dataService.GetAllProducts();
@@ -142,60 +181,12 @@ namespace BakeshopManagement.Business
         }
 
 
-        // ----------------------------------------------------------
-        public List<(string Name, decimal Price)> GetMenu()
+        public List<Product> SearchProducts(string keyword)
         {
-            return dataService.GetMenu();
-        }
-
-        public List<Product> SearchProduct(string searchName)
-        {
-            return dataService.SearchProduct(searchName);
-        }
-
-        public bool IsProductAvailable(string product, out decimal price)
-        {
-            var menu = dataService.GetMenu();
-            var item = menu.Find(p => p.Name.Equals(product, StringComparison.OrdinalIgnoreCase));
-            if (item.Name != null)
-            {
-                price = item.Price;
-                return true;
-            }
-
-            price = 0;
-            return false;
-        }
-
-        public List<OrderItem> ProcessMultipleOrders(List<(string product, int quantity)> orders)
-        {
-            var result = new List<OrderItem>();
-
-            foreach (var order in orders)
-            {
-                if (IsProductAvailable(order.product, out decimal unitPrice))
-                {
-                    result.Add(new OrderItem
-                    {
-                        ProductName = order.product,
-                        Quantity = order.quantity,
-                        UnitPrice = unitPrice
-                    });
-                }
-            }
-
-            return result;
-        }
-
-        public void SaveOrder(Order order)
-        {
-            dataService.SaveOrder(order); 
+            return dataService.SearchProduct(keyword);
         }
 
 
-        public List<Order> GetOrders()
-        {
-            return dataService.GetOrders();
-        }
+
     }
 }

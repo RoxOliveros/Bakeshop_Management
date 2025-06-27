@@ -120,7 +120,7 @@
             cmbCategory.BackColor = Color.FromArgb(247, 183, 147);
             cmbCategory.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             cmbCategory.FormattingEnabled = true;
-            cmbCategory.Items.AddRange(new object[] { "🍰 Cake", "🍞 Bread", "\U0001f967 Pastry", "🍪 Cookie", "\U0001f964 Coffee" });
+            cmbCategory.Items.AddRange(new object[] { "🍰 Cake", "🍞 Bread", "\U0001f967 Pastry", "🍪 Cookie", "\U0001f964 Beverage" });
             cmbCategory.Location = new Point(213, 161);
             cmbCategory.Name = "cmbCategory";
             cmbCategory.Size = new Size(209, 25);

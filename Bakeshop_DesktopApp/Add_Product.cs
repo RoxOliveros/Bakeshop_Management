@@ -23,6 +23,24 @@ namespace Bakeshop_DesktopApp
             PopulateFieldsForEdit(productToEdit);
         }
 
+        private Image CropToSquareAndResize(Image original, int size)
+        {
+            int cropSize = Math.Min(original.Width, original.Height);
+            int x = (original.Width - cropSize) / 2;
+            int y = (original.Height - cropSize) / 2;
+
+            Rectangle cropArea = new Rectangle(x, y, cropSize, cropSize);
+            Bitmap squareImage = new Bitmap(cropSize, cropSize);
+
+            using (Graphics g = Graphics.FromImage(squareImage))
+            {
+                g.DrawImage(original, new Rectangle(0, 0, cropSize, cropSize), cropArea, GraphicsUnit.Pixel);
+            }
+
+            // Resize to match PictureBox size
+            return new Bitmap(squareImage, new Size(size, size));
+        }
+
 
         //Useer add image to picturebox
         private void productImageBox_Click(object sender, EventArgs e)
@@ -36,11 +54,11 @@ namespace Bakeshop_DesktopApp
                 {
                     Image originalImage = Image.FromFile(ofd.FileName);
 
-                    // Resize the image to match PictureBox size
-                    Image resizedImage = new Bitmap(originalImage, productImageBox.Width, productImageBox.Height);
+                    // Crop and resize the image
+                    Image croppedAndResized = CropToSquareAndResize(originalImage, productImageBox.Width);
 
-                    productImageBox.Image = resizedImage;
-                    productImageBox.SizeMode = PictureBoxSizeMode.Normal;
+                    productImageBox.Image = croppedAndResized;
+                    productImageBox.SizeMode = PictureBoxSizeMode.StretchImage; // Or Zoom
                 }
             }
         }
@@ -52,21 +70,10 @@ namespace Bakeshop_DesktopApp
             int wordCount = words.Length;
 
             // Optional: display word count in a label
-            lblWordCount.Text = $"Words: {wordCount}/50";
+            lblWordCount.Text = $"Words: {wordCount}";
 
-            if (wordCount > 50)
-            {
-                txtDescription.Text = string.Join(" ", words.Take(50));
-                txtDescription.SelectionStart = txtDescription.Text.Length;
-                txtDescription.SelectionLength = 0;
-
-                MessageBox.Show(
-                    $"Description cannot exceed 50 words.\nCurrent word count: {wordCount}",
-                    "Word Limit Reached",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-            }
+           
+            
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -139,14 +146,20 @@ namespace Bakeshop_DesktopApp
                 if (editingProduct == null)
                 {
                     // Add mode
-                    success = process.AddProduct(newProduct);
+                    string errorMessage;
+                     success = process.AddProduct(newProduct, out errorMessage);
+
                     if (success)
+                    {
                         MessageBox.Show("Product added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.Close(); // Or refresh product list, etc.
+                    }
                     else
                     {
-                        MessageBox.Show("Failed to add product.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
+                        MessageBox.Show(errorMessage, "Add Product Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+
+
                 }
                 else
                 {

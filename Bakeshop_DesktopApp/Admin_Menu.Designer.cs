@@ -261,11 +261,11 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Century Gothic", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogout.ForeColor = Color.FromArgb(167, 103, 84);
-            btnLogout.Location = new Point(0, 12);
+            btnLogout.Location = new Point(6, 493);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(60, 41);
+            btnLogout.Size = new Size(41, 39);
             btnLogout.TabIndex = 62;
-            btnLogout.Text = "🏠";
+            btnLogout.Text = "↩";
             btnLogout.UseVisualStyleBackColor = false;
             btnLogout.Click += btnLogout_Click_1;
             // 
@@ -299,7 +299,8 @@
             MaximizeBox = false;
             Name = "Admin_Menu";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Admin Dashboard";
+            Text = "Cozy Crust";
+            Load += Admin_Menu_Load;
             ResumeLayout(false);
             PerformLayout();
         }

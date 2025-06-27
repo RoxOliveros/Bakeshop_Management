@@ -28,7 +28,7 @@ namespace Bakeshop_SalesReport
         private void LoadChart(CartesianChart chart, List<DbOrder> orders, string mode)
         {
             var filtered = orders
-                .Where(o => o.Status.Equals("Complete", StringComparison.OrdinalIgnoreCase));
+                .Where(o => o.Status.Equals("Completed", StringComparison.OrdinalIgnoreCase));
 
             var groupedSales = new List<(string Label, decimal Total)>();
 
@@ -150,6 +150,11 @@ namespace Bakeshop_SalesReport
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void btnOrder_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

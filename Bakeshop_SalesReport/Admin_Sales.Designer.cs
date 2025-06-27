@@ -65,6 +65,7 @@
             btnOrder.TabIndex = 68;
             btnOrder.Text = "📄 ORDER";
             btnOrder.UseVisualStyleBackColor = false;
+            btnOrder.Click += btnOrder_Click;
             // 
             // btnMenu
             // 
@@ -86,10 +87,10 @@
             chartSales.BackColor = Color.FromArgb(246, 218, 196);
             chartSales.Font = new Font("Century Gothic", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             chartSales.ForeColor = Color.FromArgb(153, 78, 36);
-            chartSales.Location = new Point(28, 235);
+            chartSales.Location = new Point(42, 215);
             chartSales.MatchAxesScreenDataRatio = false;
             chartSales.Name = "chartSales";
-            chartSales.Size = new Size(841, 321);
+            chartSales.Size = new Size(814, 290);
             chartSales.TabIndex = 71;
             // 
             // cmbSortSales
@@ -100,7 +101,7 @@
             cmbSortSales.ForeColor = Color.FromArgb(153, 78, 36);
             cmbSortSales.FormattingEnabled = true;
             cmbSortSales.Items.AddRange(new object[] { "Day", "Week", "Month", "Year" });
-            cmbSortSales.Location = new Point(28, 196);
+            cmbSortSales.Location = new Point(42, 181);
             cmbSortSales.Name = "cmbSortSales";
             cmbSortSales.Size = new Size(126, 24);
             cmbSortSales.TabIndex = 72;
@@ -114,7 +115,7 @@
             dgvSalesSummary.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvSalesSummary.BackgroundColor = Color.FromArgb(247, 183, 147);
             dgvSalesSummary.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvSalesSummary.Location = new Point(570, 108);
+            dgvSalesSummary.Location = new Point(557, 98);
             dgvSalesSummary.Name = "dgvSalesSummary";
             dgvSalesSummary.ReadOnly = true;
             dgvSalesSummary.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -128,7 +129,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(899, 603);
+            ClientSize = new Size(899, 532);
             Controls.Add(dgvSalesSummary);
             Controls.Add(cmbSortSales);
             Controls.Add(chartSales);

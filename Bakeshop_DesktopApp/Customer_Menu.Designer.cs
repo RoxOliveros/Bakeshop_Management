@@ -1,6 +1,6 @@
 ﻿namespace Bakeshop_DesktopApp
 {
-    partial class User_Menu
+    partial class Customer_Menu
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(User_Menu));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Customer_Menu));
             btnLoad = new Button();
             btnCookie = new Button();
             flowLayoutPanelUser = new FlowLayoutPanel();
@@ -40,8 +40,7 @@
             btnSearch = new Button();
             txtSearchUser = new TextBox();
             button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
+            btnHistory = new Button();
             panel1 = new Panel();
             btnCheckout = new Button();
             lblTotalAmount = new Label();
@@ -204,33 +203,20 @@
             button1.Text = "☰  ORDER";
             button1.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // btnHistory
             // 
-            button2.BackColor = Color.FromArgb(255, 241, 236);
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button2.ForeColor = Color.FromArgb(153, 78, 36);
-            button2.Location = new Point(142, 57);
-            button2.Name = "button2";
-            button2.Size = new Size(85, 23);
-            button2.TabIndex = 57;
-            button2.Text = "📄 HISTORY";
-            button2.UseVisualStyleBackColor = false;
-            // 
-            // button3
-            // 
-            button3.BackColor = Color.FromArgb(255, 241, 236);
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button3.ForeColor = Color.FromArgb(153, 78, 36);
-            button3.Location = new Point(260, 57);
-            button3.Name = "button3";
-            button3.Size = new Size(85, 23);
-            button3.TabIndex = 58;
-            button3.Text = "✦ HELP";
-            button3.UseVisualStyleBackColor = false;
+            btnHistory.BackColor = Color.FromArgb(255, 241, 236);
+            btnHistory.FlatAppearance.BorderSize = 0;
+            btnHistory.FlatStyle = FlatStyle.Flat;
+            btnHistory.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnHistory.ForeColor = Color.FromArgb(153, 78, 36);
+            btnHistory.Location = new Point(142, 57);
+            btnHistory.Name = "btnHistory";
+            btnHistory.Size = new Size(85, 23);
+            btnHistory.TabIndex = 57;
+            btnHistory.Text = "📄 HISTORY";
+            btnHistory.UseVisualStyleBackColor = false;
+            btnHistory.Click += btnHistory_Click;
             // 
             // panel1
             // 
@@ -246,6 +232,7 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(314, 383);
             panel1.TabIndex = 59;
+            panel1.Paint += panel1_Paint;
             // 
             // btnCheckout
             // 
@@ -304,6 +291,7 @@
             flowLayoutCheckout.Name = "flowLayoutCheckout";
             flowLayoutCheckout.Size = new Size(295, 212);
             flowLayoutCheckout.TabIndex = 62;
+            flowLayoutCheckout.Paint += flowLayoutCheckout_Paint;
             // 
             // panel2
             // 
@@ -343,25 +331,24 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Century Gothic", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogout.ForeColor = Color.FromArgb(167, 103, 84);
-            btnLogout.Location = new Point(2, -2);
+            btnLogout.Location = new Point(7, 468);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(60, 53);
-            btnLogout.TabIndex = 63;
-            btnLogout.Text = "🏠";
+            btnLogout.Size = new Size(41, 39);
+            btnLogout.TabIndex = 67;
+            btnLogout.Text = "↩";
             btnLogout.UseVisualStyleBackColor = false;
-            btnLogout.Click += btnLogout_Click_1;
+            btnLogout.Click += btnLogout_Click_2;
             // 
-            // User_Menu
+            // Customer_Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1060, 494);
+            ClientSize = new Size(1060, 506);
             Controls.Add(btnLogout);
             Controls.Add(panel1);
-            Controls.Add(button3);
-            Controls.Add(button2);
+            Controls.Add(btnHistory);
             Controls.Add(button1);
             Controls.Add(btnLoad);
             Controls.Add(btnCookie);
@@ -378,7 +365,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            Name = "User_Menu";
+            Name = "Customer_Menu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "User_Menu";
             Load += User_Menu_Load;
@@ -401,8 +388,7 @@
         private Button btnSearch;
         private TextBox txtSearchUser;
         private Button button1;
-        private Button button2;
-        private Button button3;
+        private Button btnHistory;
         private Panel panel1;
         private Label label2;
         private Panel panel2;

@@ -63,17 +63,17 @@ namespace Bakeshop_DesktopApp
                 Password = password
             };
 
-            bool success = process.RegisterCustomer(newAccount);
+            string errorMessage;
+            bool success = process.RegisterCustomer(newAccount, out errorMessage);
 
-            if (success)
+            if (!success)
             {
-                MessageBox.Show("Registration successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                MessageBox.Show(errorMessage, "Registration Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            else
-            {
-                MessageBox.Show("Registration failed. Try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+
+            MessageBox.Show("Registration successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            this.Close();
         }
 
         private void txtName_TextChanged(object sender, EventArgs e)

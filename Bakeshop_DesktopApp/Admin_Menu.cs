@@ -14,6 +14,7 @@ using BakeshopManagement.Business;
 using Bakeshop_SalesReport;
 
 
+
 namespace Bakeshop_DesktopApp
 {
     public partial class Admin_Menu : SharedFunction
@@ -22,7 +23,7 @@ namespace Bakeshop_DesktopApp
         public Admin_Menu()
         {
             InitializeComponent();
-            flowLayoutPanelProducts = flowLayoutPanelAdmin; // your actual panel
+            flowLayoutPanelProducts = flowLayoutPanelAdmin; 
             txtSearch = txtSearchAdmin;
             LoadProducts();
 
@@ -111,7 +112,7 @@ namespace Bakeshop_DesktopApp
         private void btnCoffee_Click(object sender, EventArgs e)
         {
             ChangeButtonColor(sender as Button);
-            LoadCategory("🥤 Coffee");
+            LoadCategory("🥤 Beverage");
         }
 
         private void btnSearch_Click_1(object sender, EventArgs e)
@@ -169,6 +170,11 @@ namespace Bakeshop_DesktopApp
         }
 
         private void txtSearchAdmin_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Admin_Menu_Load(object sender, EventArgs e)
         {
 
         }
