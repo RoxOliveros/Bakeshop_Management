@@ -63,13 +63,13 @@ namespace Bakeshop_DesktopApp
             }
         }
 
-        //add limitation to word count in description 
+        
         private void txtDescription_TextChanged(object sender, EventArgs e)
         {
             string[] words = txtDescription.Text.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
             int wordCount = words.Length;
 
-            // Optional: display word count in a label
+            // display word count in a label
             lblWordCount.Text = $"Words: {wordCount}";
 
            

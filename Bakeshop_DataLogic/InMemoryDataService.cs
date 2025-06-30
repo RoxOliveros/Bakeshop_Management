@@ -174,7 +174,7 @@ namespace Bakeshop_DataLogic
 
         public CustomerAccount GetCustomerById(int userId)
         {
-            return Accounts.ElementAtOrDefault(userId); // simplified dummy
+            return Accounts.ElementAtOrDefault(userId); 
         }
 
         public bool AddProduct(Product product) => true;

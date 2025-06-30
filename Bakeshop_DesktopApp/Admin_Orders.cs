@@ -156,7 +156,7 @@ namespace Bakeshop_DesktopApp
 
                 var salesChartForm = new Bakeshop_SalesReport.Admin_Sales(completedOrders);
 
-                // These help make sure the form shows up
+                
                 salesChartForm.StartPosition = FormStartPosition.CenterScreen;
                 salesChartForm.TopMost = true;
 

@@ -12,7 +12,6 @@ namespace BakeshopManagement
             var sharedProcess = new BakeshopProcess();
             LogIn_UI login = new LogIn_UI(sharedProcess);
             login.DisplayLogin();
-
         }
 
         public static void Admin(BakeshopProcess process)
@@ -23,13 +22,15 @@ namespace BakeshopManagement
             {
                 Console.WriteLine("\n===== ADMIN DASHBOARD =====");
                 string[] actions = new string[] {
-                    "[1] Add Product",
-                    "[2] Delete Product",
-                    "[3] Search Product",
-                    "[4] View Menu",
-                    "[5] View Orders",
-                    "[6] Logout"
-                };
+                        "[1] Add Product",
+                        "[2] Delete Product",
+                        "[3] Search Product",
+                        "[4] View Menu",
+                        "[5] View Orders",
+                        "[6] Update Product",
+                        "[7] Logout"
+                    };
+
 
                 foreach (var action in actions)
                 {
@@ -43,61 +44,47 @@ namespace BakeshopManagement
                     Console.Clear();
                     switch (adminAction)
                     {
-                       
                         case 1: // Add product
-
                             Console.Write("Enter product name: ");
                             string name = Console.ReadLine();
 
-                            if (string.IsNullOrWhiteSpace(name))
-                            {
-                                Console.WriteLine("❌ Product name cannot be empty.");
-                                break;
-                            }
+                            Console.Write("Enter category: ");
+                            string category = Console.ReadLine();
+
+                            Console.Write("Enter description: ");
+                            string desc = Console.ReadLine();
 
                             Console.Write("Enter price: ");
                             if (decimal.TryParse(Console.ReadLine(), out decimal price) && price >= 0)
-
-
                             {
-                                try
+                                var product = new Product
                                 {
-                                    var product = new Product
-                                    {
-                                        ProductName = name,
-                                        Price1 = price,
-                                        Option1 = "Regular", // basic default
-                                        Category = "General",
-                                       ProductImage = null  // important to avoid the varbinary error
-                                    };
+                                    ProductName = name,
+                                    Price1 = price,
+                                    Option1 = "Regular",
+                                    Category = category,
+                                    Description = desc
+                                };
 
-
-
-                                    if (process.AddProduct(product, out string errorMsg))
-                                        Console.WriteLine($" {name} added successfully!");
-                                    else
-                                        Console.WriteLine($" Error: {errorMsg}");
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($" Unexpected error occurred: {ex.Message}");
-                                }
+                                if (process.AddProduct(product, out string errorMsg))
+                                    Console.WriteLine($"{name} added successfully!");
+                                else
+                                    Console.WriteLine($"Error: {errorMsg}");
                             }
                             else
                             {
-                                Console.WriteLine(" Invalid price input.");
+                                Console.WriteLine("Invalid price input.");
                             }
                             break;
-
 
                         case 2: // Delete product
                             Console.Write("Enter product name to delete: ");
                             string toDelete = Console.ReadLine();
 
                             if (process.DeleteProduct(toDelete))
-                                Console.WriteLine($" {toDelete} deleted.");
+                                Console.WriteLine($"{toDelete} deleted.");
                             else
-                                Console.WriteLine($" {toDelete} not found.");
+                                Console.WriteLine($"{toDelete} not found.");
                             break;
 
                         case 3: // Search product
@@ -107,13 +94,13 @@ namespace BakeshopManagement
                             var found = process.SearchProducts(keyword);
                             if (found != null && found.Count > 0)
                             {
-                                Console.WriteLine("\n Search Results:");
+                                Console.WriteLine("\nSearch Results:");
                                 foreach (var p in found)
-                                    Console.WriteLine($"- {p.ProductName} (₱{p.Price1:0.00})");
+                                    Console.WriteLine($"- {p.ProductName} (Php{p.Price1:0.00})");
                             }
                             else
                             {
-                                Console.WriteLine(" No matching product found.");
+                                Console.WriteLine("No matching product found.");
                             }
                             break;
 
@@ -125,41 +112,87 @@ namespace BakeshopManagement
                             DisplayOrders(process);
                             break;
 
-                        case 6:
-                            Console.WriteLine(" Logging out...");
+                        case 6: // Update product
+                            Console.Write("Enter product name to update: ");
+                            string updateName = Console.ReadLine();
+
+                            var existing = process.SearchProducts(updateName)?.FirstOrDefault();
+
+                            if (existing == null)
+                            {
+                                Console.WriteLine("Product not found.");
+                                break;
+                            }
+
+                            Console.WriteLine($"Editing: {existing.ProductName}");
+                            Console.Write($"New name [{existing.ProductName}]: ");
+                            string newName = Console.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(newName))
+                                existing.ProductName = newName;
+
+                            Console.Write($"New category [{existing.Category}]: ");
+                            string newCategory = Console.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(newCategory))
+                                existing.Category = newCategory;
+
+                            Console.Write($"New description [{existing.Description}]: ");
+                            string newDesc = Console.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(newDesc))
+                                existing.Description = newDesc;
+
+                            Console.Write($"New price [{existing.Price1}]: ");
+                            string priceInput = Console.ReadLine();
+                            if (decimal.TryParse(priceInput, out decimal newPrice) && newPrice >= 0)
+                                existing.Price1 = newPrice;
+
+                            if (process.UpdateProduct(existing))
+                                Console.WriteLine("Product updated successfully.");
+                            else
+                                Console.WriteLine("Failed to update product.");
+                            break;
+
+
+                        case 7:
+                            Console.WriteLine("Logging out...");
                             RestartLogin(process);
                             break;
 
                         default:
-                            Console.WriteLine(" Invalid option.");
+                            Console.WriteLine("Invalid option.");
                             break;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("❌ Please enter a valid number.");
+                    Console.WriteLine("Please enter a valid number.");
                 }
 
-            } while (adminAction != 6);
+            } while (adminAction != 7);
         }
 
         public static void Menu(BakeshopProcess process)
         {
-            Console.WriteLine("\n===== MENU ITEMS =====");
+            Console.WriteLine("\n===== MENU ITEMS =====\n");
+
             var menu = process.GetAllProducts();
 
             if (menu == null || menu.Count == 0)
             {
-                Console.WriteLine("No products available.");
+                Console.WriteLine("No products available.\n");
             }
             else
             {
                 foreach (var p in menu)
                 {
-                    Console.WriteLine($"- {p.ProductName} (₱{p.Price1:0.00})");
+                    Console.WriteLine($"Product Name : {p.ProductName}");
+                    Console.WriteLine($"Category     : {p.Category}");
+                    Console.WriteLine($"Price        : Php {p.Price1:0.00}");
+                    Console.WriteLine($"Description  : {p.Description}");
+                    Console.WriteLine(new string('-', 40));
                 }
             }
         }
+
 
         public static void RestartLogin(BakeshopProcess process)
         {
@@ -167,33 +200,44 @@ namespace BakeshopManagement
             loginUI.DisplayLogin();
         }
 
-
         public static void DisplayOrders(BakeshopProcess process)
         {
             Console.WriteLine("\n===== PENDING ORDERS =====");
-            var orders = process.GetAllPendingOrders();
+            var pendingOrders = process.GetAllPendingOrders();
 
-            if (orders == null || orders.Count == 0)
+            if (pendingOrders == null || pendingOrders.Count == 0)
             {
-                Console.WriteLine("No orders yet.");
+                Console.WriteLine("No pending orders.");
+                return;
             }
-            else
+
+            foreach (var order in pendingOrders)
             {
-                foreach (var order in orders)
+                Console.WriteLine($"\nOrder ID   : {order.OrderID}");
+                Console.WriteLine($"User ID    : {order.UserID}");
+                Console.WriteLine($"Date       : {order.OrderDate:MMMM dd, yyyy hh:mm tt}");
+                Console.WriteLine($"Total      : ₱{order.TotalAmount:0.00}");
+                Console.WriteLine($"Status     : {order.Status}");
+
+                // Get order details
+                var details = process.GetOrderDetails(order.OrderID);
+                if (details.Count > 0)
                 {
-                    Console.WriteLine($"\n Order ID: {order.OrderID} | User ID: {order.UserID} | Status: {order.Status}");
-
-                    var details = process.GetOrderDetails(order.OrderID);
-
+                    Console.WriteLine("Items:");
                     foreach (var item in details)
                     {
-                        Console.WriteLine($" - {item.ProductName} x{item.Quantity} = ₱{item.TotalPrice:0.00}");
+                        Console.WriteLine($" - {item.ProductName} x{item.Quantity} @ ₱{item.UnitPrice:0.00} = ₱{item.TotalPrice:0.00}");
                     }
-
-                    Console.WriteLine($"Total: {order.TotalAmount:0.00}");
-                    Console.WriteLine("--------------------------------------");
                 }
+                else
+                {
+                    Console.WriteLine("No items found.");
+                }
+
+                Console.WriteLine(new string('-', 40));
             }
         }
+
     }
 }
+

@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Bakeshop_BusinessLogic">
+      <HintPath>..\Bakeshop_BusinessDataLogic\bin\Debug\net8.0\Bakeshop_BusinessLogic.dll</HintPath>
+    </Reference>
     <Reference Include="Bakeshop_Common">
       <HintPath>..\Bakeshop_BusinessDataLogic\bin\Debug\net8.0\Bakeshop_Common.dll</HintPath>
     </Reference>

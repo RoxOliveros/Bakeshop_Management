@@ -9,10 +9,10 @@ namespace Bakeshop_DataLogic
         public BakeshopDataService()
         {
             // You can switch between data sources here:
-            // bakeshopDataService = new TextFileBakeshopDataSource();
+           bakeshopDataService = new TextFileBakeshopDataSource();
             //bakeshopDataService = new InMemoryBakeshopDataSource();
             // bakeshopDataService = new JsonFileBakeshopDataSource();
-           bakeshopDataService = new DBBakeshopDataSource(); 
+           //bakeshopDataService = new DBBakeshopDataSource(); 
         }
 
 

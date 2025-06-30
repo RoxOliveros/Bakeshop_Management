@@ -367,7 +367,7 @@
             MaximizeBox = false;
             Name = "Customer_Menu";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "User_Menu";
+            Text = "Cozy Crust";
             Load += User_Menu_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

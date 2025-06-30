@@ -16,7 +16,8 @@ namespace Bakeshop_API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<BakeshopProcess>();
-           
+            builder.Services.AddHttpClient();
+
 
             // Enable CORS for frontend connections 
             builder.Services.AddCors(options =>

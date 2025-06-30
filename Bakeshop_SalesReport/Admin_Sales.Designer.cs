@@ -36,6 +36,7 @@
             cmbSortSales = new ComboBox();
             panel1 = new Panel();
             lblChartTitle = new Label();
+            btnAIInsights = new Button();
             panel2 = new Panel();
             lblSales = new Label();
             label1 = new Label();
@@ -45,10 +46,15 @@
             panel4 = new Panel();
             lblOrders = new Label();
             label6 = new Label();
+            panel5 = new Panel();
+            lblSummaryOutput = new Label();
+            label2 = new Label();
+            panel6 = new Panel();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
             panel4.SuspendLayout();
+            panel5.SuspendLayout();
             SuspendLayout();
             // 
             // button3
@@ -58,7 +64,7 @@
             button3.FlatStyle = FlatStyle.Flat;
             button3.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             button3.ForeColor = Color.FromArgb(153, 78, 36);
-            button3.Location = new Point(263, 65);
+            button3.Location = new Point(272, 85);
             button3.Name = "button3";
             button3.Size = new Size(85, 26);
             button3.TabIndex = 69;
@@ -72,7 +78,7 @@
             btnOrder.FlatStyle = FlatStyle.Flat;
             btnOrder.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnOrder.ForeColor = Color.FromArgb(153, 78, 36);
-            btnOrder.Location = new Point(145, 65);
+            btnOrder.Location = new Point(154, 85);
             btnOrder.Name = "btnOrder";
             btnOrder.Size = new Size(85, 26);
             btnOrder.TabIndex = 68;
@@ -87,7 +93,7 @@
             btnMenu.FlatStyle = FlatStyle.Flat;
             btnMenu.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnMenu.ForeColor = Color.FromArgb(153, 78, 36);
-            btnMenu.Location = new Point(28, 65);
+            btnMenu.Location = new Point(37, 85);
             btnMenu.Name = "btnMenu";
             btnMenu.Size = new Size(85, 26);
             btnMenu.TabIndex = 67;
@@ -146,6 +152,21 @@
             lblChartTitle.TabIndex = 75;
             lblChartTitle.Text = "SALES REPORT BY WEEK";
             lblChartTitle.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // btnAIInsights
+            // 
+            btnAIInsights.BackColor = Color.FromArgb(255, 241, 236);
+            btnAIInsights.FlatAppearance.BorderSize = 0;
+            btnAIInsights.FlatStyle = FlatStyle.Flat;
+            btnAIInsights.Font = new Font("Century Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnAIInsights.ForeColor = Color.Blue;
+            btnAIInsights.Location = new Point(744, 536);
+            btnAIInsights.Name = "btnAIInsights";
+            btnAIInsights.Size = new Size(109, 26);
+            btnAIInsights.TabIndex = 81;
+            btnAIInsights.Text = "✨ AI Insights";
+            btnAIInsights.UseVisualStyleBackColor = false;
+            btnAIInsights.Click += btnAIInsights_Click;
             // 
             // panel2
             // 
@@ -246,13 +267,61 @@
             label6.TabIndex = 78;
             label6.Text = "TOTAL ORDERS:";
             // 
+            // panel5
+            // 
+            panel5.AutoScroll = true;
+            panel5.BackColor = Color.White;
+            panel5.BorderStyle = BorderStyle.FixedSingle;
+            panel5.Controls.Add(lblSummaryOutput);
+            panel5.Location = new Point(43, 564);
+            panel5.Name = "panel5";
+            panel5.Size = new Size(816, 279);
+            panel5.TabIndex = 82;
+            // 
+            // lblSummaryOutput
+            // 
+            lblSummaryOutput.AutoSize = true;
+            lblSummaryOutput.Font = new Font("Century Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSummaryOutput.Location = new Point(19, 18);
+            lblSummaryOutput.Name = "lblSummaryOutput";
+            lblSummaryOutput.Size = new Size(0, 20);
+            lblSummaryOutput.TabIndex = 0;
+            lblSummaryOutput.UseCompatibleTextRendering = true;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.BackColor = Color.Transparent;
+            label2.Font = new Font("Century Gothic", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.ForeColor = Color.FromArgb(153, 78, 36);
+            label2.Location = new Point(43, 527);
+            label2.Name = "label2";
+            label2.Size = new Size(218, 23);
+            label2.TabIndex = 81;
+            label2.Text = "✨ YOUR AI SUMMARY:";
+            label2.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // panel6
+            // 
+            panel6.AutoScroll = true;
+            panel6.BackColor = Color.FromArgb(255, 241, 236);
+            panel6.Location = new Point(42, 849);
+            panel6.Name = "panel6";
+            panel6.Size = new Size(816, 17);
+            panel6.TabIndex = 83;
+            // 
             // Admin_Sales
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             BackgroundImage = Properties.Resources.bg;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(899, 532);
+            Controls.Add(btnAIInsights);
+            Controls.Add(panel6);
+            Controls.Add(panel5);
+            Controls.Add(label2);
             Controls.Add(panel3);
             Controls.Add(panel4);
             Controls.Add(panel2);
@@ -278,6 +347,8 @@
             panel3.PerformLayout();
             panel4.ResumeLayout(false);
             panel4.PerformLayout();
+            panel5.ResumeLayout(false);
+            panel5.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -290,7 +361,7 @@
         private ComboBox cmbSortSales;
         private Panel panel1;
         private Label lblChartTitle;
-        private Button button1;
+        private Button btnAIInsights;
         private Panel panel2;
         private Label lblSales;
         private Label label1;
@@ -300,5 +371,9 @@
         private Panel panel4;
         private Label lblOrders;
         private Label label6;
+        private Panel panel5;
+        private Label lblSummaryOutput;
+        private Label label2;
+        private Panel panel6;
     }
 }

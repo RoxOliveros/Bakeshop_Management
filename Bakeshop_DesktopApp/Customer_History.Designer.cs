@@ -137,7 +137,7 @@
             MaximizeBox = false;
             Name = "Customer_History";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "COZY CRUST";
+            Text = "Cozy Crust";
             Load += Customer_History_Load;
             ResumeLayout(false);
         }

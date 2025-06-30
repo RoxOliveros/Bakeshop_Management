@@ -1,391 +1,264 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
 using Bakeshop_Common;
 
 namespace Bakeshop_DataLogic
 {
-    public class JsonFileBakeshopDataService : IBakeshopDataService
+    public class TextFileBakeshopDataSource : IBakeshopDataService
     {
-        private string accountsFile = "accounts.json";
-        private string menuFile = "menu.json";
-        private string orderFile = "orders.json";
+        private readonly string accountsFile = "accounts.txt";
+        private readonly string productFile = "menu.txt";
+        private readonly string orderFile = "orders.txt";
 
         private List<CustomerAccount> Accounts = new List<CustomerAccount>();
-        private List<(string Name, decimal Price)> Menu = new List<(string, decimal)>();
+        private List<Product> Products = new List<Product>();
         private List<Order> Orders = new List<Order>();
 
-        public JsonFileBakeshopDataService()
+        public TextFileBakeshopDataSource()
         {
-            try { LoadAccounts(); } catch { Accounts = new List<CustomerAccount>(); }
-            try { LoadMenu(); } catch { Menu = new List<(string, decimal)>(); }
-            try { LoadOrders(); } catch { Orders = new List<Order>(); }
+            LoadAccounts();
+            LoadProducts();
+            LoadOrders();
         }
-
-        // ========== Load / Save Logic ==========
 
         private void LoadAccounts()
         {
-            if (File.Exists(accountsFile))
-            {
-                var json = File.ReadAllText(accountsFile);
-                Accounts = JsonSerializer.Deserialize<List<CustomerAccount>>(json) ?? new List<CustomerAccount>();
-            }
+            if (!File.Exists(accountsFile)) return;
+            Accounts = File.ReadAllLines(accountsFile)
+                .Select(line => line.Split('|'))
+                .Select(parts => new CustomerAccount { Name = parts[0], Username = parts[1], Password = parts[2], Email = parts[3] })
+                .ToList();
         }
 
         private void SaveAccounts()
         {
-            try
-            {
-                var json = JsonSerializer.Serialize(Accounts, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(accountsFile, json);
-            }
-            catch { }
+            var lines = Accounts.Select(a => $"{a.Name}|{a.Username}|{a.Password}|{a.Email}");
+            File.WriteAllLines(accountsFile, lines);
         }
 
-        private void LoadMenu()
+        private void LoadProducts()
         {
-            if (File.Exists(menuFile))
-            {
-                var json = File.ReadAllText(menuFile);
-                var menuItems = JsonSerializer.Deserialize<List<MenuItem>>(json);
-                if (menuItems != null)
+            if (!File.Exists(productFile)) return;
+
+            var lines = File.ReadAllLines(productFile);
+
+            Products = lines
+                .Where(line => !string.IsNullOrWhiteSpace(line) && !line.StartsWith("=") && !line.StartsWith("Product Name"))
+                .Select(line =>
                 {
-                    Menu = menuItems.Select(m => (m.Name, m.Price)).ToList();
-                }
-            }
+                    var parts = line.Split('|');
+                    if (parts.Length < 13) return null;
+
+                    return new Product
+                    {
+                        ProductId = int.TryParse(parts[0], out int id) ? id : 0,
+                        ProductImage = null,
+                        ProductName = parts[1],
+                        Category = parts[2],
+                        Option1 = parts[3],
+                        Price1 = decimal.TryParse(parts[4], out var p1) ? p1 : 0,
+                        Option2 = parts[5],
+                        Price2 = decimal.TryParse(parts[6], out var p2) ? p2 : null,
+                        Option3 = parts[7],
+                        Price3 = decimal.TryParse(parts[8], out var p3) ? p3 : null,
+                        Option4 = parts[9],
+                        Price4 = decimal.TryParse(parts[10], out var p4) ? p4 : null,
+                        Description = parts[11]
+                    };
+                })
+                .Where(p => p != null)
+                .ToList();
         }
 
-        private void SaveMenu()
+
+        private void SaveProducts()
         {
-            try
-            {
-                var menuItems = Menu.Select(m => new MenuItem { Name = m.Name, Price = m.Price }).ToList();
-                var json = JsonSerializer.Serialize(menuItems, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(menuFile, json);
-            }
-            catch { }
+            var lines = Products.Select(p =>
+                $"{p.ProductId}|{p.ProductName}|{p.Category}|{p.Option1}|{p.Price1}|{p.Description}");
+            File.WriteAllLines(productFile, lines);
         }
 
         private void LoadOrders()
         {
-            if (File.Exists(orderFile))
-            {
-                var json = File.ReadAllText(orderFile);
-                Orders = JsonSerializer.Deserialize<List<Order>>(json) ?? new List<Order>();
-            }
+            if (!File.Exists(orderFile)) return;
+
+            var lines = File.ReadAllLines(orderFile);
+
+            Orders = lines
+                .Where(line => !string.IsNullOrWhiteSpace(line) && !line.StartsWith("="))
+                .Select(line =>
+                {
+                    var parts = line.Split('|');
+                    if (parts.Length < 5) return null; // Expecting: OrderId|UserID|CustomerName|Timestamp|ProductName1,Qty,Price;ProductName2,...
+
+                    try
+                    {
+                        int orderId = int.Parse(parts[0]);
+                        int userId = int.Parse(parts[1]);
+                        string customerName = parts[2];
+                        DateTime timestamp = DateTime.Parse(parts[3]);
+
+                        // Parse order items
+                        var items = new List<OrderItem>();
+                        var itemTokens = parts[4].Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+                        foreach (var token in itemTokens)
+                        {
+                            var itemParts = token.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                            if (itemParts.Length == 3 &&
+                                !string.IsNullOrWhiteSpace(itemParts[0]) &&
+                                int.TryParse(itemParts[1], out int qty) &&
+                                decimal.TryParse(itemParts[2], out decimal price))
+                            {
+                                items.Add(new OrderItem
+                                {
+                                    ProductName = itemParts[0],
+                                    Quantity = qty,
+                                    UnitPrice = price
+                                });
+                            }
+                        }
+
+                        return new Order(items, customerName)
+                        {
+                            OrderId = orderId,
+                            UserID = userId,
+                            Timestamp = timestamp
+                        };
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                })
+                .Where(o => o != null)
+                 .ToList();
         }
+
 
         private void SaveOrders()
         {
-            try
+            var lines = Orders.SelectMany(o => o.Items.Select(i =>
+                $"{o.OrderId}|{o.CustomerName}|{i.ProductName}|{i.Quantity}|{i.UnitPrice}|{o.UserID}|{o.Timestamp}"));
+            File.WriteAllLines(orderFile, lines);
+        }
+
+        public bool AddProduct(Product product)
+        {
+            product.ProductId = Products.Any() ? Products.Max(p => p.ProductId) + 1 : 1;
+            Products.Add(product);
+            SaveProducts();
+            return true;
+        }
+
+        public bool UpdateProduct(Product product)
+        {
+            var existing = Products.FirstOrDefault(p => p.ProductId == product.ProductId);
+            if (existing != null)
             {
-                var json = JsonSerializer.Serialize(Orders, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(orderFile, json);
+                existing.ProductName = product.ProductName;
+                existing.Category = product.Category;
+                existing.Option1 = product.Option1;
+                existing.Price1 = product.Price1;
+                existing.Description = product.Description;
+                SaveProducts();
+                return true;
             }
-            catch { }
+            return false;
         }
 
-        // ========== Core Methods ==========
-
-        public void AddProduct(string product, decimal price)
+        public bool DeleteProduct(string productName)
         {
-            try
+            var match = Products.FirstOrDefault(p => p.ProductName.Equals(productName, StringComparison.OrdinalIgnoreCase));
+            if (match != null)
             {
-                Menu.Add((product, price));
-                SaveMenu();
+                Products.Remove(match);
+                SaveProducts();
+                return true;
             }
-            catch { }
+            return false;
         }
 
-        public bool UpdateProduct(string name, decimal newPrice)
+        public List<Product> GetAllProducts() => new List<Product>(Products);
+
+        public List<Product> GetProductsByCategory(string category) =>
+            Products.Where(p => p.Category?.Equals(category, StringComparison.OrdinalIgnoreCase) == true).ToList();
+
+        public List<Product> SearchProduct(string keyword) =>
+            Products.Where(p => p.ProductName.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        public bool SaveOrder(int userId, List<Cart> cartItems, out int newOrderId)
         {
-            try
+            var customer = Accounts.FirstOrDefault(a => a.UserID == userId);
+            newOrderId = 0;
+            if (customer == null) return false;
+
+            var items = cartItems.Select(c => new OrderItem
             {
-                int index = Menu.FindIndex(m => m.Name == name);
-                if (index != -1)
-                {
-                    Menu[index] = (name, newPrice);
-                    SaveMenu();
-                    return true;
-                }
-                return false;
-            }
-            catch { return false; }
+                ProductName = c.ProductName,
+                Quantity = c.Quantity,
+                UnitPrice = c.UnitPrice
+            }).ToList();
+
+            var order = new Order(items, customer.Name) { UserID = userId };
+            Orders.Add(order);
+            newOrderId = order.OrderId;
+            SaveOrders();
+            return true;
         }
 
-        //public bool DeleteProduct(string product)
-        //{
-        //    try
-        //    {
-        //        int index = Menu.FindIndex(m => m.Name == product);
-        //        if (index != -1)
-        //        {
-        //            Menu.RemoveAt(index);
-        //            SaveMenu();
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //    catch { return false; }
-        //}
-
-        //public decimal? SearchProduct(string product)
-        //{
-        //    try
-        //    {
-        //        var match = Menu.FirstOrDefault(m => m.Name == product);
-        //        return match != default ? match.Price : (decimal?)null;
-        //    }
-        //    catch { return null; }
-        //}
-
-        public List<(string Name, decimal Price)> GetMenu()
-        {
-            try { return new List<(string, decimal)>(Menu); }
-            catch { return new List<(string, decimal)>(); }
-        }
-
-        public bool ValidateCustomer(string username, string password)
-        {
-            try
+        public List<DbOrder> GetAllPendingOrders() =>
+            Orders.Select(o => new DbOrder
             {
-                return Accounts.Any(a => a.Username == username && a.Password == password);
-            }
-            catch { return false; }
-        }
+                OrderID = o.OrderId,
+                UserID = o.UserID,
+                OrderDate = o.Timestamp,
+                TotalAmount = o.TotalAmount,
+                Status = "Pending"
+            }).ToList();
 
-        public CustomerAccount GetCustomer(string username)
+        public List<OrderDetail> GetOrderDetails(int orderId)
         {
-            try { return Accounts.FirstOrDefault(a => a.Username == username); }
-            catch { return null; }
-        }
-
-        public void SaveOrder(Order order)
-        {
-            try
+            var order = Orders.FirstOrDefault(o => o.OrderId == orderId);
+            return order?.Items.Select((i, idx) => new OrderDetail
             {
-                Orders.Add(order);
-                SaveOrders();
-            }
-            catch { }
+                DetailID = idx + 1,
+                OrderID = orderId,
+                ProductName = i.ProductName,
+                Quantity = i.Quantity,
+                UnitPrice = i.UnitPrice
+            }).ToList() ?? new List<OrderDetail>();
         }
 
-        public List<Order> GetOrders()
-        {
-            try { return Orders; }
-            catch { return new List<Order>(); }
-        }
-
-        private class MenuItem
-        {
-            public string Name { get; set; }
-            public decimal Price { get; set; }
-        }
-
-        // ========== STUB METHODS for Interface ==========
+        public List<Order> GetOrders() => new List<Order>(Orders);
 
         public bool RegisterCustomerAccount(CustomerAccount account)
         {
-            try
-            {
-                Accounts.Add(account);
-                SaveAccounts();
-                return true;
-            }
-            catch { return false; }
+            Accounts.Add(account);
+            SaveAccounts();
+            return true;
         }
 
-        public CustomerAccount GetCustomerById(int userId)
-        {
-            try
-            {
-                return Accounts.ElementAtOrDefault(userId);
-            }
-            catch { return null; }
-        }
+        public bool ValidateCustomer(string username, string password) =>
+            Accounts.Any(a => a.Username == username && a.Password == password);
 
-        public bool AddProduct(Product product) => true;
-        public bool UpdateProduct(Product product) => true;
-        public bool DeleteProduct(string productName) => true;
-        public List<Product> GetAllProducts() => new List<Product>();
-        public List<Product> GetProductsByCategory(string category) => new List<Product>();
-        public List<Product> SearchProduct(string keyword) => new List<Product>();
+        public CustomerAccount GetCustomer(string username) =>
+            Accounts.FirstOrDefault(a => a.Username == username);
+
+        public CustomerAccount GetCustomerById(int userId) =>
+            Accounts.FirstOrDefault(a => a.UserID == userId);
 
         public bool AddToCartProduct(Cart cart) => true;
         public List<Cart> GetCartItems(int userId) => new List<Cart>();
         public bool UpdateCartItem(Cart cart) => true;
         public bool DeleteCartItem(int cartId) => true;
-
-        public bool SaveOrder(int userId, List<Cart> cartItems, out int newOrderId)
-        {
-            newOrderId = 999;
-            return true;
-        }
-
-        public List<DbOrder> GetAllPendingOrders() => new List<DbOrder>();
         public List<DbOrder> GetAllCompletedOrders() => new List<DbOrder>();
-        public List<OrderDetail> GetOrderDetails(int orderId) => new List<OrderDetail>();
         public bool MarkOrderAsComplete(int orderId) => true;
         public bool MarkOrderAsCancelled(int orderId) => true;
-
         public bool AddToFavorites(int userId, int productId) => true;
         public bool RemoveFromFavorites(int userId, int productId) => true;
         public bool IsFavorite(int userId, int productId) => true;
     }
 }
-
-
-
-
-
-
-
-
-
-
-//using System;
-//using System.Collections.Generic;
-//using System.IO;
-//using System.Linq;
-//using System.Text.Json;
-//using Bakeshop_Common;
-
-//namespace Bakeshop_DataLogic
-//{
-//    public class JsonFileBakeshopDataService : IBakeshopDataService
-//    {
-//        private string accountsFile = "accounts.json";
-//        private string menuFile = "menu.json";
-//        private string orderFile = "orders.json";
-
-//        private List<CustomerAccount> Accounts = new List<CustomerAccount>();
-//        private List<(string Name, decimal Price)> Menu = new List<(string, decimal)>();
-//        private List<Order> Orders = new List<Order>();
-
-//        public JsonFileBakeshopDataService()
-//        {
-//            LoadAccounts();
-//            LoadMenu();
-//            LoadOrders();
-//        }
-
-//        // Load/Save Accounts
-//        private void LoadAccounts()
-//        {
-//            if (File.Exists(accountsFile))
-//            {
-//                Accounts = JsonSerializer.Deserialize<List<CustomerAccount>>(File.ReadAllText(accountsFile)) ?? new List<CustomerAccount>();
-//            }
-//        }
-
-//        private void SaveAccounts()
-//        {
-//            File.WriteAllText(accountsFile, JsonSerializer.Serialize(Accounts, new JsonSerializerOptions { WriteIndented = true }));
-//        }
-
-//        // Load/Save Menu
-//        private void LoadMenu()
-//        {
-//            if (File.Exists(menuFile))
-//            {
-//                var menuItems = JsonSerializer.Deserialize<List<MenuItem>>(File.ReadAllText(menuFile));
-//                if (menuItems != null)
-//                {
-//                    Menu = menuItems.Select(m => (m.Name, m.Price)).ToList();
-//                }
-//            }
-//        }
-
-//        private void SaveMenu()
-//        {
-//            var menuItems = Menu.Select(m => new MenuItem { Name = m.Name, Price = m.Price }).ToList();
-//            File.WriteAllText(menuFile, JsonSerializer.Serialize(menuItems, new JsonSerializerOptions { WriteIndented = true }));
-//        }
-
-//        // Load/Save Orders
-//        private void LoadOrders()
-//        {
-//            if (File.Exists(orderFile))
-//            {
-//                Orders = JsonSerializer.Deserialize<List<Order>>(File.ReadAllText(orderFile)) ?? new List<Order>();
-//            }
-//        }
-
-//        private void SaveOrders()
-//        {
-//            File.WriteAllText(orderFile, JsonSerializer.Serialize(Orders, new JsonSerializerOptions { WriteIndented = true }));
-//        }
-
-//        public void AddProduct(string product, decimal price)
-//        {
-//            Menu.Add((product, price));
-//            SaveMenu();
-//        }
-
-//        public bool UpdateProduct(string name, decimal newPrice)
-//        {
-//            int index = Menu.FindIndex(m => m.Name == name);
-//            if (index != -1)
-//            {
-//                Menu[index] = (name, newPrice);
-//                SaveMenu();
-//                return true;
-//            }
-//            return false;
-//        }
-
-//        public bool DeleteProduct(string product)
-//        {
-//            int index = Menu.FindIndex(m => m.Name == product);
-//            if (index != -1)
-//            {
-//                Menu.RemoveAt(index);
-//                SaveMenu();
-//                return true;
-//            }
-//            return false;
-//        }
-
-//        public decimal? SearchProduct(string product)
-//        {
-//            var match = Menu.FirstOrDefault(m => m.Name == product);
-//            return match != default ? match.Price : (decimal?)null;
-//        }
-
-//        public List<(string Name, decimal Price)> GetMenu()
-//        {
-//            return new List<(string, decimal)>(Menu);
-//        }
-
-//        public bool ValidateCustomer(string username, string password)
-//        {
-//            return Accounts.Any(a => a.Username == username && a.Password == password);
-//        }
-
-//        public CustomerAccount GetCustomer(string username)
-//        {
-//            return Accounts.FirstOrDefault(a => a.Username == username);
-//        }
-
-//        public void SaveOrder(Order order)
-//        {
-//            Orders.Add(order);
-//            SaveOrders();
-//        }
-
-//        public List<Order> GetOrders()
-//        {
-//            return Orders;
-//        }
-
-//        private class MenuItem
-//        {
-//            public string Name { get; set; }
-//            public decimal Price { get; set; }
-//        }
-//    }
-//}

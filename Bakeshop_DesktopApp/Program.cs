@@ -19,7 +19,7 @@ namespace Bakeshop_DesktopApp
 
                 //taskkill /IM Bakeshop_DesktopApp.exe /F
 
-              //Application.Run(new User_Menu(process, customer));
+             
             }
             catch (Exception ex)
             {

@@ -702,20 +702,6 @@ namespace Bakeshop_DataLogic
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
        
     }
 }
