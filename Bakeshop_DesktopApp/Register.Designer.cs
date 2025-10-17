@@ -73,7 +73,7 @@
             label1.BackColor = Color.Transparent;
             label1.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = Color.FromArgb(153, 78, 36);
-            label1.Location = new Point(526, 183);
+            label1.Location = new Point(526, 174);
             label1.Name = "label1";
             label1.Size = new Size(72, 16);
             label1.TabIndex = 5;
@@ -86,10 +86,10 @@
             txtUsername.BorderStyle = BorderStyle.None;
             txtUsername.Font = new Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtUsername.ForeColor = Color.FromArgb(243, 229, 219);
-            txtUsername.Location = new Point(526, 202);
+            txtUsername.Location = new Point(526, 193);
             txtUsername.Multiline = true;
             txtUsername.Name = "txtUsername";
-            txtUsername.Size = new Size(102, 23);
+            txtUsername.Size = new Size(233, 23);
             txtUsername.TabIndex = 4;
             // 
             // label2
@@ -98,7 +98,7 @@
             label2.BackColor = Color.Transparent;
             label2.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label2.ForeColor = Color.FromArgb(153, 78, 36);
-            label2.Location = new Point(526, 247);
+            label2.Location = new Point(526, 283);
             label2.Name = "label2";
             label2.Size = new Size(68, 16);
             label2.TabIndex = 7;
@@ -110,11 +110,12 @@
             txtPass.BorderStyle = BorderStyle.None;
             txtPass.Font = new Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtPass.ForeColor = Color.FromArgb(243, 229, 219);
-            txtPass.Location = new Point(526, 266);
+            txtPass.Location = new Point(526, 302);
             txtPass.Multiline = true;
             txtPass.Name = "txtPass";
             txtPass.Size = new Size(233, 23);
             txtPass.TabIndex = 6;
+            txtPass.TextChanged += txtPass_TextChanged;
             // 
             // label4
             // 
@@ -122,7 +123,7 @@
             label4.BackColor = Color.Transparent;
             label4.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label4.ForeColor = Color.FromArgb(153, 78, 36);
-            label4.Location = new Point(657, 183);
+            label4.Location = new Point(526, 231);
             label4.Name = "label4";
             label4.Size = new Size(41, 16);
             label4.TabIndex = 11;
@@ -134,10 +135,10 @@
             txtEmail.BorderStyle = BorderStyle.None;
             txtEmail.Font = new Font("Century Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             txtEmail.ForeColor = Color.FromArgb(243, 229, 219);
-            txtEmail.Location = new Point(657, 202);
+            txtEmail.Location = new Point(526, 250);
             txtEmail.Multiline = true;
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(102, 23);
+            txtEmail.Size = new Size(233, 23);
             txtEmail.TabIndex = 10;
             // 
             // button1
@@ -173,7 +174,7 @@
             btnRegister.FlatStyle = FlatStyle.Flat;
             btnRegister.Font = new Font("Century Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRegister.ForeColor = Color.FromArgb(243, 229, 219);
-            btnRegister.Location = new Point(684, 313);
+            btnRegister.Location = new Point(684, 353);
             btnRegister.Name = "btnRegister";
             btnRegister.Size = new Size(75, 30);
             btnRegister.TabIndex = 12;

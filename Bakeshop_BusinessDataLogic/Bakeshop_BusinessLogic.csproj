@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.14.1" />
+    <PackageReference Include="MimeKit" Version="4.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Bakeshop_Common\Bakeshop_Common.csproj" />
     <ProjectReference Include="..\Bakeshop_DataLogic\Bakeshop_DataLogic.csproj" />
   </ItemGroup>
