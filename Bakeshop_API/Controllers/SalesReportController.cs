@@ -30,7 +30,13 @@ namespace Bakeshop_API.Controllers
             {
                 var client = _httpClientFactory.CreateClient();
 
-                client.DefaultRequestHeaders.Add("Authorization", "Bearer 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");
+               
+                var apiKey = Environment.GetEnvironmentVariable("HUGGINGFACE_API_KEY");
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    return StatusCode(500, "Hugging Face API key is missing from environment variables.");
+                }
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
 
                 var prompt = $"Summarize the following sales data and highlight key trends and best-selling products:\n{input.RawData}";
 
