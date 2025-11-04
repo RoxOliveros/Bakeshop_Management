@@ -6,7 +6,7 @@ namespace BakeshopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Tags("˚.🎀༘⋆ Login & Registration ˚.🎀༘⋆")]
+    [Tags("˚.🎀༘⋆ Login˚.🎀༘⋆")]
     public class CustomerController : ControllerBase
     {
         private BakeshopProcess _process;

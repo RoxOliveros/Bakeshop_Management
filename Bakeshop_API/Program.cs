@@ -1,4 +1,5 @@
 using BakeshopManagement.Business;
+using Email;
 
 namespace Bakeshop_API
 {
@@ -16,6 +17,9 @@ namespace Bakeshop_API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<BakeshopProcess>();
+
+            builder.Services.AddSingleton<EmailService>();
+
             builder.Services.AddHttpClient();
 
 
